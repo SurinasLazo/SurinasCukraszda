@@ -1,0 +1,40 @@
+/* Footer.css */
+
+.footer {
+  background-color: #c5c2bded; /* Halvány bézs háttérszín */
+  color: #333;
+  padding: 2rem 0;
+  margin: 0; /* Margók eltávolítása */
+}
+
+.footer h5 {
+  color: #333;
+}
+
+.footer p {
+  margin-bottom: 1rem;
+  line-height: 1.5; /* Tördelés beállítása */
+}
+
+.footer a {
+  color: #0916cc;
+}
+
+.footer a:hover {
+  text-decoration: none;
+  color: #ff7043;
+}
+
+.footer small {
+  color: #777;
+}
+
+.footer-bottom {
+  color: #000000; /* Feher színű szöveg */
+  padding: 0.5rem 0;
+}
+
+.container-fluid {
+  padding-right: 0;
+  padding-left: 0;
+}

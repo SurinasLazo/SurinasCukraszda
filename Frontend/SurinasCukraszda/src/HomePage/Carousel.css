@@ -1,0 +1,22 @@
+.carousel {
+  overflow: hidden; /* A túlcsorduló tartalom elrejtése */
+  max-width: 720px; /* A carousel maximális szélessége */
+  margin: auto; /* Középre igazítás */
+}
+
+.carousel .carousel-inner {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.carousel .carousel-item {
+  text-align: center; /* Képek középre igazítása */
+}
+
+.carousel .carousel-item img {
+  max-height: 480px; /* Maximális képmagasság */
+  max-width: 100%; /* Maximális képszélesség */
+  object-fit: contain; /* Arányos méretezés */
+  margin: auto; /* Képek középre igazítása */
+}
