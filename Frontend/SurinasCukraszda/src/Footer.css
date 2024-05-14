@@ -1,19 +1,17 @@
-/* Footer.css */
-
 .footer {
-  background-color: #c5c2bded; /* Halvány bézs háttérszín */
+  background-color: #c5c2bded;
   color: #333;
   padding: 2rem 0;
-  margin: 0; /* Margók eltávolítása */
+  margin: 0;
+  width: 100vw;
 }
-
 .footer h5 {
   color: #333;
 }
 
 .footer p {
   margin-bottom: 1rem;
-  line-height: 1.5; /* Tördelés beállítása */
+  line-height: 1.5;
 }
 
 .footer a {
@@ -30,7 +28,7 @@
 }
 
 .footer-bottom {
-  color: #000000; /* Feher színű szöveg */
+  color: #000000;
   padding: 0.5rem 0;
 }
 

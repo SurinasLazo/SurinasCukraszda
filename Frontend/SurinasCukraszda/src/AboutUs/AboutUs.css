@@ -1,0 +1,73 @@
+.about-us {
+  background-color: #f9f8bf;
+  padding: 20px;
+  text-align: center;
+  margin-left: 25%;
+  margin-right: 25%;
+}
+
+.header-image {
+  margin-bottom: 20px;
+}
+
+.logo {
+  max-width: 100%;
+  height: auto;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  color: #aa1f22;
+}
+
+p.text-bubble {
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px 20px;
+  margin: 10px 0;
+  display: inline-block;
+  max-width: 90%;
+  text-align: left;
+}
+
+.recognition {
+  margin: 20px 0;
+}
+
+.recognition img {
+  max-width: 100%;
+  height: auto;
+  border: 2px solid #aa1f22;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.gallery-img {
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+  border: 2px solid #aa1f22;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.gallery-img:hover {
+  opacity: 0.8;
+}
+
+.google-map {
+  margin: 20px 0;
+}
+
+.google-map iframe {
+  width: 100%;
+  height: 450px;
+  border: 0;
+}

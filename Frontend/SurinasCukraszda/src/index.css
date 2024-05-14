@@ -28,9 +28,9 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #f7f7dc; /* Kívánt háttérszín */
-  margin: 0; /* Margók eltávolítása a body körül */
-  padding: 0; /* Belső kitöltés eltávolítása a body körül */
+  background-color: #f7f7dc;
+  margin: 0;
+  padding: 0;
 }
 
 h1 {
