@@ -1,6 +1,11 @@
-// Footer.jsx
 import React from "react";
-import "./Footer.css"; // Importáljuk be a CSS fájlt
+import "./Footer.css";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { faPhone } from "@fortawesome/free-solid-svg-icons";
+import { faFacebook } from "@fortawesome/free-brands-svg-icons";
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 const Footer = () => {
   return (
@@ -10,8 +15,12 @@ const Footer = () => {
           <div className="col-md-4">
             <h5>Elérhetőség</h5>
             <p>
-              <strong>Cím:</strong> Gyula, Temesvári út 24, 5700 <br />
-              <strong>Telefonszám:</strong> 06 70 303 8788 <br />
+              <FontAwesomeIcon icon={faLocationDot} /> <strong>Cím:</strong>{" "}
+              Gyula, Temesvári út 24, 5700 <br />
+              <FontAwesomeIcon icon={faPhone} /> <strong>Telefonszám:</strong>{" "}
+              06 70 303 8788 <br />
+              <FontAwesomeIcon icon={faEnvelope} /> <strong>Email:</strong>{" "}
+              surinascukraszda@gmail.com <br />
             </p>
           </div>
           <div className="col-md-4">
@@ -27,7 +36,8 @@ const Footer = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <i className="fab fa-facebook-square"></i> Facebook
+              <FontAwesomeIcon icon={faFacebook} />
+              Facebook
             </a>
           </div>
         </div>

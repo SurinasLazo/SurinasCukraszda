@@ -1,88 +1,64 @@
 import React from "react";
 import "./FeaturedProducts.css";
-const ProductCard = ({ image, name, price }) => {
-  return (
-    <div className="card" style={{ width: "18rem" }}>
-      <img src={image} className="card-img-top" alt={name} />
-      <div className="card-body">
-        <h5 className="card-title">{name}</h5>
-        <p className="card-text">Ár: {price} Ft</p>
-        <a href="#" className="btn btn-primary">
-          Részletek
-        </a>
-      </div>
-    </div>
-  );
-};
+import { Link } from "react-router-dom";
+import products from "../data/products";
 
-const ProductsSection = ({ products, title }) => {
-  return (
-    <div>
-      <h2>{title}</h2>
-      <div className="row">
-        {products.map((product, index) => (
-          <div key={index} className="col-md-3 mb-4">
-            <ProductCard {...product} />
-          </div>
-        ))}
-      </div>
+const ProductCard = ({ product }) => (
+  <div className="card" style={{ width: "18rem" }}>
+    <img src={product.image} className="card-img-top" alt={product.name} />
+    <div className="card-body">
+      <h5 className="card-title">{product.name}</h5>
+      <p className="card-text">Ár: {product.price} Ft</p>
+      <Link to={`/product/${product.id}`} className="btn btn-primary">
+        Részletek
+      </Link>
     </div>
-  );
-};
+  </div>
+);
+
+const ProductSection = ({ title, products }) => (
+  <div className="product-section">
+    <h2>{title}</h2>
+    <div className="row">
+      {products.map((product) => (
+        <div key={product.id} className="col-md-3 mb-4">
+          <ProductCard product={product} />
+        </div>
+      ))}
+    </div>
+  </div>
+);
 
 const FeaturedProducts = () => {
-  // Sütemények tömbje
-  const bakeryProducts = [
-    {
-      image: "../src/MISC/placeholder.png",
-      name: "Krémes",
-      price: 500,
-    },
-    {
-      image: "../src/MISC/placeholder.png",
-      name: "Sütemény 1",
-      price: 500,
-    },
-    {
-      image: "../src/MISC/placeholder.png",
-      name: "Sütemény 1",
-      price: 500,
-    },
-    {
-      image: "../src/MISC/placeholder.png",
-      name: "Sütemény 1",
-      price: 500,
-    },
-  ];
+  // Kiemelt sütemények
+  const featuredBakeryProducts = products.filter(
+    (product) => product.category === "sütemény" && product.kiemelt
+  );
 
-  // Fagyik tömbje
-  const iceCreamProducts = [
-    {
-      image: "../src/MISC/placeholder.png",
-      name: "Fagyi 1",
-      price: 600,
-    },
-    {
-      image: "../src/MISC/placeholder.png",
-      name: "Fagyi 1",
-      price: 600,
-    },
-    {
-      image: "../src/MISC/placeholder.png",
-      name: "Fagyi 1",
-      price: 600,
-    },
-    {
-      image: "../src/MISC/placeholder.png",
-      name: "Fagyi 1",
-      price: 600,
-    },
-  ];
+  // Kiemelt fagyik
+  const featuredIceCreamProducts = products.filter(
+    (product) => product.category === "fagyi" && product.kiemelt
+  );
+
+  // Kiemelt csomagolt sütemények
+  const featuredPackagedProducts = products.filter(
+    (product) => product.category === "csomagolt sütemény" && product.kiemelt
+  );
 
   return (
-    <div>
-      <ProductsSection products={bakeryProducts} title="Kiemelt sütemények" />
-      <ProductsSection products={iceCreamProducts} title="Kiemelt fagyik" />
+    <div className="container">
+      <ProductSection
+        title="Kiemelt Sütemények"
+        products={featuredBakeryProducts}
+      />
+      <ProductSection
+        title="Kiemelt Fagyik"
+        products={featuredIceCreamProducts}
+      />
+      <ProductSection
+        title="Kiemelt Csomagolt Sütemények"
+        products={featuredPackagedProducts}
+      />
     </div>
   );
 };

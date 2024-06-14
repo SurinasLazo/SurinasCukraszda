@@ -1,13 +1,15 @@
-//import React from "react";
+import React from "react";
 import "./Header.css";
 import logo from "./MISC/Logo.png";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHouse } from "@fortawesome/free-solid-svg-icons";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 const Header = () => {
   return (
     <header className="custom-navbar">
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <div className="container-fluid">
-          <a className="navbar-brand" href="#">
+          <a className="navbar-brand" href="/">
             <img
               src={logo}
               alt="Logo"
@@ -31,22 +33,23 @@ const Header = () => {
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav ms-auto">
               <li className="nav-item">
-                <a className="nav-link active" aria-current="page" href="#">
-                  Főoldal
+                <a className="nav-link" href="/">
+                  <FontAwesomeIcon icon={faHouse} /> Főoldal
                 </a>
               </li>
+
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <a className="nav-link" href="/products">
                   Termékek
                 </a>
               </li>
               <li className="nav-item">
                 <a className="nav-link" href="#">
-                  Kosár
+                  <FontAwesomeIcon icon={faCartShopping} /> Kosár
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <a className="nav-link" href="/AboutUs">
                   Rólunk
                 </a>
               </li>
