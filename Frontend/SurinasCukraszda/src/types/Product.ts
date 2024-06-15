@@ -3,7 +3,9 @@ export interface Product {
   name: string;
   price: number;
   description: string;
-  category: string; // "sütemény", "fagyi", "kimért sütemény"
+  allergens: string[];
+  weight: string;
+  category: string;
   image: string;
   kiemelt: boolean;
 }

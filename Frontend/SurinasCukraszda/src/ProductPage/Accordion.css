@@ -1,0 +1,27 @@
+.accordion-custom .accordion-item {
+  background-color: #f7f7dc;
+  border: none;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.accordion-custom .accordion-header {
+  background-color: #f7f7dc;
+  color: #ffffff;
+  padding: 10px 0;
+  cursor: pointer;
+  border: none;
+}
+
+.accordion-custom .accordion-body {
+  padding: 10px;
+}
+
+.accordion-custom .accordion-body strong {
+  margin-right: 5px;
+}
+
+/* Toggle ikon színe */
+.accordion-custom .accordion-button {
+  background-color: #f7f7dc !important;
+}

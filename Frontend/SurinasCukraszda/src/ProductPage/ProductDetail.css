@@ -1,50 +1,72 @@
-img {
-  max-width: 500px;
-  height: auto;
-}
 .product-detail {
-  margin: 20px;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-top: 150px;
 }
 
-.product-info {
-  text-align: center;
-}
-
-.product-info h2 {
-  margin-bottom: 10px;
-}
-
-.product-info img {
-  max-width: 100%;
+.product-detail-image img {
+  border: 2px solid #eb7424;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  width: 75%;
   height: auto;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
-.product-info p {
-  margin-bottom: 10px;
+.product-detail-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-detail-info hr {
+  width: 100%;
+  margin: 10px 0;
+}
+
+.product-detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .quantity-selector {
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
 }
 
-.quantity-btn {
-  background-color: #007bff;
-  color: white;
-  border: none;
+.quantity-selector .form-control {
+  width: 60px;
+  text-align: center;
+}
+
+.quantity-selector .btn {
   padding: 5px 10px;
-  cursor: pointer;
-  font-size: 1rem;
 }
 
-.quantity {
-  margin: 0 10px;
-  font-size: 1.2rem;
+.no-arrows::-webkit-outer-spin-button,
+.no-arrows::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.no-arrows {
+  -moz-appearance: textfield;
+}
+.product-detail p {
+  text-align: left;
+  font-size: large;
+}
+
+.btn-secondary {
+  background-color: #eb7424;
+  color: #ffffff;
+}
+
+.btn-primary {
+  background-color: #eb7424;
+  color: #ffffff;
+}
+hr {
+  height: 5px;
+  color: #f66b0f;
+}
+.vissza {
+  margin-bottom: 50px;
 }
