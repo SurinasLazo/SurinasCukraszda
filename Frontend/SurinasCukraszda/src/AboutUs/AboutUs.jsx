@@ -1,4 +1,5 @@
 import React from "react";
+import { Accordion } from "react-bootstrap";
 import "./AboutUs.css";
 import logo from "../MISC/logo2.png";
 import recognition from "../MISC/NegyOrszagosElismeres.png";
@@ -19,22 +20,63 @@ const AboutUs = () => {
           <img src={logo} alt="Cukrászda Logo" className="logo" />
         </div>
         <h2>Jelmondat: Minden ízében hagyomány.</h2>
-        <p className="text-bubble">
-          Hagyományos módon készítjük a fagyikat édesapánk receptúrája alapján.
-          Már 40 éve ugyanazt a receptet használja a család.
-        </p>
-        <p className="text-bubble">
-          1984-ben alapult. Surinás László Mestercukrász alapította a családi
-          vállalkozást.
-        </p>
-        <div className="recognition">
-          <img src={recognition} alt="Országos elismerés" />
-          <p className="text-bubble">
-            Országos rangos elismerés: Legtöbb a tájjellegű gasztronómiai
-            rendezvény. Kitüntetett a regionális gasztronómiai szervezet
-            képviseletében Surinás László.
-          </p>
-        </div>
+        <Accordion className="accordion-custom">
+          <Accordion.Item eventKey="0">
+            <Accordion.Header className="accordion-header">
+              <strong> Bevezető</strong>
+            </Accordion.Header>
+            <Accordion.Body className="accordion-body">
+              <p>
+                Surinás László, cukrász mester, cukrászat iránti szenvedélyével
+                és elhivatottságával egy kis cukrászdából kiindulva építette fel
+                a Békés vármegye egyik legismertebb cukrászdáját. Számos díjjal
+                és elismeréssel büszkélkedhet, amelyek méltó helyet biztosítanak
+                számára a magyar cukrászat történetében.
+              </p>
+            </Accordion.Body>
+          </Accordion.Item>
+          <Accordion.Item eventKey="1">
+            <Accordion.Header className="accordion-header">
+              <strong>Történet</strong>
+            </Accordion.Header>
+            <Accordion.Body className="accordion-body">
+              <p>
+                Surinás László 1960-ban kezdte pályafutását, és hamarosan a
+                magyar cukrászipar egyik legelismertebb alakjává vált.
+                Munkásságát a hagyományos receptek és a modern technikák
+                ötvözése jellemzi, amelynek köszönhetően édességei nemcsak
+                finomak, hanem művészi megjelenésűek is.
+              </p>
+            </Accordion.Body>
+          </Accordion.Item>
+          <Accordion.Item eventKey="2">
+            <Accordion.Header className="accordion-header">
+              <strong>Elismerések</strong>
+            </Accordion.Header>
+            <Accordion.Body className="accordion-body">
+              <p>
+                Surinás László számos szakmai díjat és kitüntetést nyert el
+                karrierje során. Munkásságát az Országos Cukrász Szövetség és
+                más neves szakmai szervezetek is elismerték, és többször is
+                elnyerte az év cukrásza címet.
+              </p>
+            </Accordion.Body>
+          </Accordion.Item>
+          <Accordion.Item eventKey="3">
+            <Accordion.Header className="accordion-header">
+              <strong>Jövőkép</strong>
+            </Accordion.Header>
+            <Accordion.Body className="accordion-body">
+              <p>
+                A család és az utódok büszkén viszik tovább hagyományait,
+                biztosítva, hogy az ő szenvedélye és szakértelme generációkon át
+                formálja és gazdagítsa a cukrászat világát. A Surinás Sütiház új
+                fejezetet nyit, megőrizve a múlt értékeit és újításokkal
+                készülve a jövőbe.
+              </p>
+            </Accordion.Body>
+          </Accordion.Item>
+        </Accordion>
         <div className="gallery">
           <img
             src={galleryImage1}
@@ -57,7 +99,6 @@ const AboutUs = () => {
             className="gallery-img"
           />
         </div>
-        <p className="text-bubble">Könyvből ide idézés............_______</p>
         <h3>Itt található a Sütiház</h3>
         <GoogleMap />
       </div>
