@@ -40,6 +40,7 @@
   padding: 5px 10px;
 }
 
+/* Eltávolítja az input spin gombokat */
 .no-arrows::-webkit-outer-spin-button,
 .no-arrows::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -49,24 +50,42 @@
 .no-arrows {
   -moz-appearance: textfield;
 }
+
 .product-detail p {
   text-align: left;
   font-size: large;
 }
 
+/* Gombok alapértelmezett stílusa, felülírva a Bootstrap-et */
+.btn-primary,
 .btn-secondary {
-  background-color: #eb7424;
-  color: #ffffff;
+  background-color: #eb7424 !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
-.btn-primary {
-  background-color: #eb7424;
-  color: #ffffff;
+/* Hover, focus, active állapotok egységes kezelése */
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-primary:focus,
+.btn-secondary:focus,
+.btn-primary:active,
+.btn-secondary:active {
+  background-color: #eb7424 !important;
+  color: #ffffff !important;
+  border: none !important;
 }
+
+/* Vonalak stílusa */
 hr {
   height: 5px;
   color: #f66b0f;
 }
+
+/* "További termékek böngészése" gomb */
 .vissza {
   margin-bottom: 50px;
+  background-color: #eb7424 !important;
+  border: none !important;
 }

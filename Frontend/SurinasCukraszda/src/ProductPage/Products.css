@@ -15,3 +15,28 @@
   border: 2px solid #eb7424;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
+
+.nav-tabs .nav-link {
+  background-color: var(--secondary-color);
+  color: var(--white-color);
+  border: none;
+  padding: 10px 15px;
+  margin-right: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-link:hover {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+}
+
+.nav-tabs {
+  border-bottom: none;
+}
+
+.nav-tabs .nav-link.active {
+  border: none;
+  border-color: transparent;
+  box-shadow: none;
+}

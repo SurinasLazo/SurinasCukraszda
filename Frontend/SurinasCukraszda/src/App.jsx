@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./HomePage/HomePage";
 import AboutUs from "./AboutUs/AboutUs";
 import Products from "./ProductPage/Products";
-import ProductDetail from "./ProductPage/ProductDetail";
+import ProductDetail from "./ProductPage/ProductDetails/ProductDetail";
 function App() {
   return (
     <Router>

@@ -2,6 +2,7 @@ import React from "react";
 import "./FeaturedProducts.css";
 import { Link } from "react-router-dom";
 import products from "../data/products";
+import useCartStore from "../store/cartStore";
 
 const ProductCard = ({ product }) => (
   <div className="card" style={{ width: "18rem" }}>
@@ -30,6 +31,8 @@ const ProductSection = ({ title, products }) => (
 );
 
 const FeaturedProducts = () => {
+  const cart = useCartStore((state) => state.cart);
+
   // Kiemelt sütemények
   const featuredBakeryProducts = products.filter(
     (product) => product.category === "sütemény" && product.kiemelt
@@ -47,6 +50,9 @@ const FeaturedProducts = () => {
 
   return (
     <div className="container">
+      {cart.map((item) => (
+        <div key={item.id}>{item.quantity}</div>
+      ))}
       <ProductSection
         title="Kiemelt Sütemények"
         products={featuredBakeryProducts}

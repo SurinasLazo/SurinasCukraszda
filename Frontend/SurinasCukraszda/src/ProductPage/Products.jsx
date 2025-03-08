@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import products from "../data/products";
 import { Link } from "react-router-dom";
 import "./Products.css";
@@ -32,24 +32,66 @@ const ProductSection = ({ title, products }) => (
 );
 
 const Products = () => {
-  const sutemenyek = products.filter(
-    (product) => product.category === "sütemény"
+  // Állapot a kiválasztott kategória követésére
+  const [selectedCategory, setSelectedCategory] = useState("sütemény");
+
+  // A megfelelő kategóriába tartozó termékek szűrése
+  const filteredProducts = products.filter(
+    (product) => product.category === selectedCategory
   );
-  const fagyik = products.filter((product) => product.category === "fagyi");
-  const csomagoltSutemenyek = products.filter(
-    (product) => product.category === "csomagolt sütemény"
-  );
+
+  // Segédváltozó a menü gomb felirataihoz
+  const categoryTitles = {
+    sütemény: "Sütemények",
+    "csomagolt sütemény": "Csomagolt Sütemények",
+    fagyi: "Fagylalt",
+  };
 
   return (
     <>
       <Header />
       <div className="container">
-        <ProductSection title="Sütemények" products={sutemenyek} />
-        <ProductSection title="Fagyik" products={fagyik} />
-        <ProductSection
-          title="Csomagolt Sütemények"
-          products={csomagoltSutemenyek}
-        />
+        {/* Felső navigációs menü */}
+        <ul className="nav nav-tabs mt-4">
+          <li className="nav-item">
+            <button
+              className={`nav-link ${
+                selectedCategory === "sütemény" ? "active" : ""
+              }`}
+              onClick={() => setSelectedCategory("sütemény")}
+            >
+              {categoryTitles["sütemény"]}
+            </button>
+          </li>
+          <li className="nav-item">
+            <button
+              className={`nav-link ${
+                selectedCategory === "csomagolt sütemény" ? "active" : ""
+              }`}
+              onClick={() => setSelectedCategory("csomagolt sütemény")}
+            >
+              {categoryTitles["csomagolt sütemény"]}
+            </button>
+          </li>
+          <li className="nav-item">
+            <button
+              className={`nav-link ${
+                selectedCategory === "fagyi" ? "active" : ""
+              }`}
+              onClick={() => setSelectedCategory("fagyi")}
+            >
+              {categoryTitles["fagyi"]}
+            </button>
+          </li>
+        </ul>
+
+        {/* Csak a kiválasztott kategória termékeinek megjelenítése */}
+        <div className="mt-4">
+          <ProductSection
+            title={categoryTitles[selectedCategory]}
+            products={filteredProducts}
+          />
+        </div>
       </div>
       <Footer />
     </>

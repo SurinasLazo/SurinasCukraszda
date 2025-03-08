@@ -1,6 +1,6 @@
 import React from "react";
 import { Accordion } from "react-bootstrap";
-import products from "../data/products";
+import products from "../../data/products";
 import { useParams } from "react-router-dom";
 import "./Accordion.css";
 function AccordionLeiras() {
