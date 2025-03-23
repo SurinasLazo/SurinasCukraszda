@@ -7,6 +7,7 @@ import HomePage from "./HomePage/HomePage";
 import AboutUs from "./AboutUs/AboutUs";
 import Products from "./ProductPage/Products";
 import ProductDetail from "./ProductPage/ProductDetails/ProductDetail";
+import Cart from "./Cart/Cart";
 function App() {
   return (
     <Router>
@@ -14,6 +15,8 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/aboutus" element={<AboutUs />} />
         <Route exact path="/products" element={<Products></Products>} />
+
+        <Route path="/cart" element={<Cart />} />
         <Route
           path="/product/:productId"
           element={<ProductDetail></ProductDetail>}

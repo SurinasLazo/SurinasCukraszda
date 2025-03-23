@@ -24,6 +24,7 @@
     "react-bootstrap-accordion": "^1.0.0",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.23.1",
+    "react-toastify": "^11.0.5",
     "socket.io-client": "^4.8.1",
     "typescript": "^5.4.5",
     "use-sync-external-store": "^1.4.0",

@@ -5,24 +5,18 @@ import "./ProductDetail.css";
 import Header from "../../Header";
 import Footer from "../../Footer";
 import AccordionLeiras from "./Accordion";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import useCartStore from "../../store/cartStore";
 
 const ProductDetail = () => {
   const { productId } = useParams();
   const product = products.find((product) => product.id === productId);
   const [quantity, setQuantity] = useState(1);
-
-  //const addToCart = useCartStore((state)=> state.addToCart);
-  const { addToCart, removeFromCart, updateQuantity, cart } = useCartStore(
-    (state) => state
-  );
+  const addToCart = useCartStore((state) => state.addToCart);
 
   if (!product) {
-    return (
-      <div className="container py-5">
-        <p>Termék nem található</p>
-      </div>
-    );
+    return <div>Termék nem található</div>;
   }
 
   const handleQuantityChange = (delta) => {
@@ -34,11 +28,9 @@ const ProductDetail = () => {
     setQuantity(value);
   };
 
-  // TODO: Integráld a Zustand-alapú kosár funkciót ide a jövőben!
   const handleAddToCart = () => {
-    console.log("Kosárba helyezendő termék:", product);
-    console.log("Kívánt mennyiség:", quantity);
     addToCart(product, quantity);
+    toast.success(`${product.name} hozzáadva a kosárhoz!`);
   };
 
   return (
@@ -101,6 +93,8 @@ const ProductDetail = () => {
         </div>
       </main>
       <Footer />
+      {/* ToastContainer biztosítja, hogy a toast üzenetek megjelenjenek */}
+      <ToastContainer position="top-right" autoClose={3000} />
     </>
   );
 };
