@@ -19,6 +19,7 @@
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.8.2",
     "bootstrap": "^5.3.3",
+    "mongoose": "^8.12.2",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.2",
     "react-bootstrap-accordion": "^1.0.0",
