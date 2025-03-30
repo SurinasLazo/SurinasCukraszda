@@ -16,7 +16,7 @@ const RegisterModal = ({ show, handleClose, switchToLogin }) => {
       return;
     }
     try {
-      await axios.post("http://localhost:5000/api/auth/register", {
+      await axios.post("http://localhost:5001/api/auth/register", {
         name,
         email,
         password,
