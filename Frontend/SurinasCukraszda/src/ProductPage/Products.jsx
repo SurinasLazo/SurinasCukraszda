@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import products from "../data/products";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
 import "./Products.css";
 import Header from "../Header";
@@ -32,60 +32,68 @@ const ProductSection = ({ title, products }) => (
 );
 
 const Products = () => {
-  // Állapot a kiválasztott kategória követésére
-  const [selectedCategory, setSelectedCategory] = useState("sütemény");
+  const [products, setProducts] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("összes");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  // A megfelelő kategóriába tartozó termékek szűrése
-  const filteredProducts = products.filter(
-    (product) => product.category === selectedCategory
-  );
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get("http://localhost:5001/api/products");
+        // Átalakítjuk az _id-t id-re, hogy kompatibilis legyen a régi kóddal
+        const fetchedProducts = response.data.map((prod) => ({
+          ...prod,
+          id: prod._id
+        }));
+        setProducts(fetchedProducts);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+        setError("Hiba történt a termékek betöltésekor.");
+        setLoading(false);
+      }
+    };
 
-  // Segédváltozó a menü gomb felirataihoz
+    fetchProducts();
+  }, []);
+
   const categoryTitles = {
-    sütemény: "Sütemények",
+    "sütemény": "Sütemények",
     "csomagolt sütemény": "Csomagolt Sütemények",
-    fagyi: "Fagylalt",
+    "fagyi": "Fagylalt",
+    "összes": "Összes termék"
   };
+
+  let filteredProducts = products;
+  if (selectedCategory !== "összes") {
+    filteredProducts = products.filter(
+      (product) => product.category === selectedCategory
+    );
+  }
+
+  if (loading) return <p>Töltés...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <>
       <Header />
       <div className="container">
-        {/* Felső navigációs menü */}
+        {/* Navigációs menü fülökkel */}
         <ul className="nav nav-tabs mt-4">
-          <li className="nav-item">
-            <button
-              className={`nav-link ${
-                selectedCategory === "sütemény" ? "active" : ""
-              }`}
-              onClick={() => setSelectedCategory("sütemény")}
-            >
-              {categoryTitles["sütemény"]}
-            </button>
-          </li>
-          <li className="nav-item">
-            <button
-              className={`nav-link ${
-                selectedCategory === "csomagolt sütemény" ? "active" : ""
-              }`}
-              onClick={() => setSelectedCategory("csomagolt sütemény")}
-            >
-              {categoryTitles["csomagolt sütemény"]}
-            </button>
-          </li>
-          <li className="nav-item">
-            <button
-              className={`nav-link ${
-                selectedCategory === "fagyi" ? "active" : ""
-              }`}
-              onClick={() => setSelectedCategory("fagyi")}
-            >
-              {categoryTitles["fagyi"]}
-            </button>
-          </li>
+          {Object.keys(categoryTitles).map((catKey) => (
+            <li key={catKey} className="nav-item">
+              <button
+                className={`nav-link ${selectedCategory === catKey ? "active" : ""}`}
+                onClick={() => setSelectedCategory(catKey)}
+              >
+                {categoryTitles[catKey]}
+              </button>
+            </li>
+          ))}
         </ul>
 
-        {/* Csak a kiválasztott kategória termékeinek megjelenítése */}
+        {/* Szűrt termékek megjelenítése */}
         <div className="mt-4">
           <ProductSection
             title={categoryTitles[selectedCategory]}

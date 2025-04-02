@@ -1,36 +1,34 @@
+// src/ProductPage/ProductDetails/Accordion.jsx
 import React from "react";
 import { Accordion } from "react-bootstrap";
-import products from "../../data/products";
-import { useParams } from "react-router-dom";
-import "./Accordion.css";
-function AccordionLeiras() {
-  const { productId } = useParams();
-  const product = products.find((product) => product.id === productId);
+
+const AccordionLeiras = ({ product }) => {
+  if (!product) return null;
 
   return (
-    <Accordion className="accordion-custom">
+    <Accordion defaultActiveKey="0" className="custom-accordion my-4">
       <Accordion.Item eventKey="0">
-        <Accordion.Header className="accordion-header">
-          <p>
-            <strong>Leírás:</strong> {product.description}
-          </p>
-        </Accordion.Header>
-        <Accordion.Body className="accordion-body">
-          <p>
-            <strong>Alergének:</strong> {product.allergens.join(", ")}
-          </p>
-          <br />
-          <p>
-            <strong>Súly:</strong> {product.weight}
-          </p>
-          <br />
-          <p>
-            <strong>Kategória:</strong> {product.category}
-          </p>
+        <Accordion.Header>Termékleírás</Accordion.Header>
+        <Accordion.Body>
+          {product.description || "Nincs elérhető leírás."}
         </Accordion.Body>
       </Accordion.Item>
+      <Accordion.Item eventKey="1">
+        <Accordion.Header>Allergének</Accordion.Header>
+        <Accordion.Body>
+          {product.allergens && product.allergens.length > 0
+            ? product.allergens.join(", ")
+            : "Nincs allergén"}
+        </Accordion.Body>
+      </Accordion.Item>
+      {product.weight && (
+        <Accordion.Item eventKey="2">
+          <Accordion.Header>Súly</Accordion.Header>
+          <Accordion.Body>{product.weight}</Accordion.Body>
+        </Accordion.Item>
+      )}
     </Accordion>
   );
-}
+};
 
 export default AccordionLeiras;
