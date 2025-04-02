@@ -1,7 +1,7 @@
-import React from "react";
-import "./FeaturedProducts.css";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
-import products from "../data/products";
+import "./FeaturedProducts.css";
 
 const ProductCard = ({ product }) => (
   <div className="card" style={{ width: "18rem" }}>
@@ -9,7 +9,7 @@ const ProductCard = ({ product }) => (
     <div className="card-body">
       <h5 className="card-title">{product.name}</h5>
       <p className="card-text">Ár: {product.price} Ft</p>
-      <Link to={`/product/${product.id}`} className="btn btn-primary">
+      <Link to={`/product/${product._id}`} className="btn btn-primary">
         Részletek
       </Link>
     </div>
@@ -21,7 +21,7 @@ const ProductSection = ({ title, products }) => (
     <h2>{title}</h2>
     <div className="row">
       {products.map((product) => (
-        <div key={product.id} className="col-md-3 mb-4">
+        <div key={product._id} className="col-md-3 mb-4">
           <ProductCard product={product} />
         </div>
       ))}
@@ -30,31 +30,30 @@ const ProductSection = ({ title, products }) => (
 );
 
 const FeaturedProducts = () => {
-  // Kiemelt sütemények
-  const featuredBakeryProducts = products.filter(
-    (product) => product.category === "sütemény" && product.kiemelt
-  );
+  const [featuredBakeryProducts, setFeaturedBakeryProducts] = useState([]);
+  const [featuredIceCreamProducts, setFeaturedIceCreamProducts] = useState([]);
+  const [featuredPackagedProducts, setFeaturedPackagedProducts] = useState([]);
 
-  // Kiemelt fagyik
-  const featuredIceCreamProducts = products.filter(
-    (product) => product.category === "fagyi" && product.kiemelt
-  );
+  useEffect(() => {
+    const fetchFeaturedProducts = async () => {
+      try {
+        const { data } = await axios.get("http://localhost:5001/api/products?kiemelt=true");
 
-  // Kiemelt csomagolt sütemények
-  const featuredPackagedProducts = products.filter(
-    (product) => product.category === "csomagolt sütemény" && product.kiemelt
-  );
+        setFeaturedBakeryProducts(data.filter((p) => p.category === "sütemény"));
+        setFeaturedIceCreamProducts(data.filter((p) => p.category === "fagyi"));
+        setFeaturedPackagedProducts(data.filter((p) => p.category === "csomagolt sütemény"));
+      } catch (error) {
+        console.error("Hiba történt a termékek lekérésekor:", error);
+      }
+    };
+
+    fetchFeaturedProducts();
+  }, []);
 
   return (
     <div className="container">
-      <ProductSection
-        title="Kiemelt Sütemények"
-        products={featuredBakeryProducts}
-      />
-      <ProductSection
-        title="Kiemelt Fagyik"
-        products={featuredIceCreamProducts}
-      />
+      <ProductSection title="Kiemelt Sütemények" products={featuredBakeryProducts} />
+      <ProductSection title="Kiemelt Fagyik" products={featuredIceCreamProducts} />
       <ProductSection
         title="Kiemelt Csomagolt Sütemények"
         products={featuredPackagedProducts}
