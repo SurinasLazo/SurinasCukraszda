@@ -1,66 +1,69 @@
+// src/routes/auth.js
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
+// Regisztráció – POST /api/auth/register
 router.post("/register", async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
+    
+    // Ellenőrizzük, hogy létezik-e már ilyen user
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "Az email már foglalt." });
+      return res.status(400).json({ message: "User already exists" });
     }
-
+    
+    // Jelszó hash-elése
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ name, email, password: hashedPassword });
-    await newUser.save();
-    res.status(201).json({ message: "Sikeres regisztráció!" });
-  } catch (error) {
-    res.status(500).json({ message: "Hiba történt a regisztráció során." });
+    const user = new User({
+      name,
+      email,
+      password: hashedPassword,
+      role: role || "user", // alapértelmezett role: user
+    });
+    
+    await user.save();
+    res.status(201).json({ message: "User registered successfully" });
+  } catch (err) {
+    console.error("Registration error:", err);
+    res.status(500).json({ message: "Error registering user" });
   }
 });
 
+// Bejelentkezés – POST /api/auth/login
 router.post("/login", async (req, res) => {
-  // Debug: listázzuk az összes usert a DB-ből
-  const allUsers = await User.find({});
-  console.log("Összes user a DB-ben:", allUsers);
-
-  console.log("Beérkező login request body:", req.body); // Ellenőrizzük, milyen adat érkezik
   try {
     const { email, password } = req.body;
-    if (!email || !password) {
-      console.error("Hiányzik az email vagy jelszó");
-      return res.status(400).json({ message: "Email és jelszó kötelező!" });
-    }
-
+    
+    // Felhasználó keresése az adatbázisban
     const user = await User.findOne({ email });
-    console.log("Megtalált user:", user);
     if (!user) {
-      console.error("Nincs ilyen felhasználó az adatbázisban:", email);
-      return res.status(400).json({ message: "Hibás email vagy jelszó." });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    console.log("Jelszó egyezés:", isMatch);
-    if (!isMatch) {
-      console.error("Jelszó nem egyezik!");
-      return res.status(400).json({ message: "Hibás email vagy jelszó." });
+    
+    // Jelszó ellenőrzése
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      return res.status(400).json({ message: "Invalid credentials" });
     }
-
+    
+    // JWT token létrehozása
     const token = jwt.sign(
-      { id: user._id, email: user.email },
+      { id: user._id, email: user.email, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
-    console.log("JWT token létrehozva:", token);
-
-    return res.status(200).json({ token, message: "Sikeres bejelentkezés!" });
-  } catch (error) {
-    console.error("Login hiba:", error);
-    return res
-      .status(500)
-      .json({ message: "Bejelentkezés sikertelen", error: error.message });
+    
+    res.status(200).json({
+      token,
+      user: { id: user._id, email: user.email, role: user.role },
+    });
+  } catch (err) {
+    console.error("Login error:", err);
+    res.status(500).json({ message: "Error logging in" });
   }
 });
 
