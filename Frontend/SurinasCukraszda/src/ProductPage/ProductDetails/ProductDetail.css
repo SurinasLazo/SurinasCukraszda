@@ -1,91 +1,143 @@
-.product-detail {
-  margin-top: 150px;
+/* 
+  1) .product-detail-wrapper => sárgás gradiens háttér 
+  2) .product-card => fehér doboz, letisztult stílus
+*/
+
+/* Csak ezen az oldalon, sárgás gradiens a háttér */
+.product-detail-wrapper {
+  background: linear-gradient(135deg, #f9f8bf 0%, #fffbea 100%);
+  padding: 40px 0;
 }
 
-.product-detail-image img {
-  border: 2px solid #eb7424;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  width: 75%;
-  height: auto;
-  margin-bottom: 30px;
+/* A "kártya" fehér doboz, középre igazítva */
+.product-card {
+  background-color: #ffffff;
+  border: 1px solid #d2d0cc;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  margin: 0 auto;
+  max-width: 800px;
 }
 
-.product-detail-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.product-detail-info hr {
+/* Bal oldali kép, 4:4 arány */
+.image-container {
   width: 100%;
-  margin: 10px 0;
+  max-width: 400px;
+  height: 400px; /* 4:4 arány */
+  overflow: hidden;
+  border-radius: 8px;
+}
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 1px solid #dee2e6;
 }
 
-.product-detail-actions {
-  display: flex;
+/* Termék információ */
+.product-info {
+  padding: 20px;
+  text-align: center;
+}
+.product-name {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+.product-price {
+  font-size: 1.75rem;
+  color: #eb7424;
+  margin-bottom: 20px;
+}
+
+/* Táblázat stílus */
+.table {
+  background-color: #fff;
+  margin: 0 auto 20px;
+  border-collapse: collapse;
+}
+.table th,
+.table td {
+  padding: 12px;
+  border: 1px solid #d2d0cc;
+}
+.table th {
+  background-color: #f9f8bf; /* Halvány sárgás fejlécek */
+  color: #333;
+  font-weight: 600;
+  width: 35%;
+}
+.table td {
+  color: #555;
+}
+
+/* Mennyiségválasztó */
+.quantity-section {
+  margin-bottom: 20px;
+}
+.quantity-selector {
+  display: inline-flex;
   align-items: center;
   gap: 10px;
 }
-
-.quantity-selector {
-  display: flex;
-  align-items: center;
-}
-
-.quantity-selector .form-control {
-  width: 60px;
-  text-align: center;
-}
-
-.quantity-selector .btn {
-  padding: 5px 10px;
-}
-
-/* Eltávolítja az input spin gombokat */
 .no-arrows::-webkit-outer-spin-button,
 .no-arrows::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
 .no-arrows {
   -moz-appearance: textfield;
 }
-
-.product-detail p {
-  text-align: left;
-  font-size: large;
+.quantity-input {
+  width: 60px;
+  text-align: center;
+  font-size: 1.1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
-/* Gombok alapértelmezett stílusa, felülírva a Bootstrap-et */
-.btn-primary,
+/* Gombok */
+.btn-cart {
+  background-color: #eb7424;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  border-radius: 5px;
+  transition: background-color 0.2s ease;
+}
+.btn-cart:hover {
+  background-color: #8c1b1e;
+}
 .btn-secondary {
-  background-color: #eb7424 !important;
-  color: #ffffff !important;
-  border: none !important;
-  box-shadow: none !important;
+  background-color: #aa1f22;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 5px;
+  transition: background-color 0.2s ease;
+}
+.btn-secondary:hover {
+  background-color: #8c1b1e;
 }
 
-/* Hover, focus, active állapotok egységes kezelése */
-.btn-primary:hover,
-.btn-secondary:hover,
-.btn-primary:focus,
-.btn-secondary:focus,
-.btn-primary:active,
-.btn-secondary:active {
-  background-color: #eb7424 !important;
-  color: #ffffff !important;
-  border: none !important;
-}
-
-/* Vonalak stílusa */
-hr {
-  height: 5px;
-  color: #f66b0f;
-}
-
-/* "További termékek böngészése" gomb */
-.vissza {
-  margin-bottom: 50px;
-  background-color: #eb7424 !important;
-  border: none !important;
+/* Reszponzív */
+@media (max-width: 768px) {
+  .product-card {
+    padding: 20px;
+  }
+  .product-name {
+    font-size: 1.75rem;
+  }
+  .product-price {
+    font-size: 1.5rem;
+  }
+  .table th,
+  .table td {
+    padding: 8px;
+  }
+  .image-container {
+    height: 300px;
+  }
 }

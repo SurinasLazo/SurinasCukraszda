@@ -1,29 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
 import "./Modal.css";
-const LoginModal = ({
-  show,
-  handleClose,
-  switchToRegister,
-  onLoginSuccess,
-}) => {
+import useAuthStore from "../store/authStore";
+
+const LoginModal = ({ show, handleClose, switchToRegister }) => {
+  useEffect(() => {
+    console.log("LoginModal show prop:", show);
+  }, [show]);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const login = useAuthStore((state) => state.login);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
-        { email, password }
-      );
-
-      localStorage.setItem("token", response.data.token);
-      onLoginSuccess();
+      const response = await axios.post("http://localhost:5001/api/auth/login", {
+        email,
+        password,
+      });
+      const token = response.data.token;
+      // Dekódoljuk a JWT payloadot.
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      login({ id: payload.id, email: payload.email, role: payload.role }, token);
+      localStorage.setItem("token", token);
       handleClose();
+      console.log("Sikeres bejelentkezés!");
     } catch (error) {
-      console.error("Login error:", error.response.data.message);
+      console.error(
+        "Login error:",
+        error.response ? error.response.data.message : error.message
+      );
+      setErrorMessage(
+        error.response && error.response.data && error.response.data.message
+          ? error.response.data.message
+          : "Bejelentkezési hiba történt"
+      );
     }
   };
 
@@ -38,7 +53,7 @@ const LoginModal = ({
             <Form.Label>Email</Form.Label>
             <Form.Control
               type="email"
-              placeholder="Email"
+              placeholder="Írd be az email címed"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -48,12 +63,13 @@ const LoginModal = ({
             <Form.Label>Jelszó</Form.Label>
             <Form.Control
               type="password"
-              placeholder="Jelszó"
+              placeholder="Írd be a jelszavad"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </Form.Group>
+          {errorMessage && <div className="text-danger mt-2">{errorMessage}</div>}
           <Button variant="primary" type="submit" className="mt-3" block>
             Belépés
           </Button>
