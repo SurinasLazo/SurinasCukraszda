@@ -17,6 +17,7 @@ interface CartStateMutations {
   addToCart: (product: Product, quantity: number) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
+  clearCart: () => void;
 }
 
 const mutations: StateCreator<CartState, [], [], CartStateMutations> = (
@@ -50,6 +51,9 @@ const mutations: StateCreator<CartState, [], [], CartStateMutations> = (
         item.id === productId ? { ...item, quantity } : item
       ),
     })),
+
+  clearCart: () => set({ cart: [] }), 
+
 });
 
 const useCartStore = createWithEqualityFn(
