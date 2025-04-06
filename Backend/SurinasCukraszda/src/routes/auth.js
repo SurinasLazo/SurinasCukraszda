@@ -32,39 +32,44 @@ router.post("/register", async (req, res) => {
     res.status(500).json({ message: "Error registering user" });
   }
 });
-
-// Bejelentkezés – POST /api/auth/login
 router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
   try {
-    const { email, password } = req.body;
-    
-    // Felhasználó keresése az adatbázisban
     const user = await User.findOne({ email });
+
     if (!user) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(401).json({ message: "Hibás email vagy jelszó" });
     }
-    
-    // Jelszó ellenőrzése
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) {
-      return res.status(400).json({ message: "Invalid credentials" });
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Hibás email vagy jelszó" });
     }
-    
-    // JWT token létrehozása
+
     const token = jwt.sign(
-      { id: user._id, email: user.email, role: user.role },
+      {
+        id: user._id.toString(), // fontos: stringgé alakítjuk
+        email: user.email,
+        role: user.role,
+      },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
-    
-    res.status(200).json({
+
+    return res.status(200).json({
       token,
-      user: { id: user._id, email: user.email, role: user.role },
+      user: {
+        id: user._id.toString(),
+        email: user.email,
+        role: user.role,
+      },
     });
-  } catch (err) {
-    console.error("Login error:", err);
-    res.status(500).json({ message: "Error logging in" });
+  } catch (error) {
+    console.error("Login error:", error);
+    return res.status(500).json({ message: "Szerverhiba a bejelentkezés során" });
   }
 });
+
 
 module.exports = router;
