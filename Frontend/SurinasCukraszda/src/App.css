@@ -99,3 +99,14 @@ body {
 body {
   overflow-x: hidden;
 }
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #faf8dc !important;
+}
