@@ -1,39 +1,79 @@
 const express = require("express");
 const router = express.Router();
 const Product = require("../models/Product");
+const multer = require("multer");
+const path = require("path");
+const { verifyToken, verifyAdmin } = require("../middleware/authMiddleware");
 
-router.get("/:id", async (req, res) => {
+// Multer konfiguráció (uploads mappába mentés)
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    const uniqueName = Date.now() + "-" + file.originalname;
+    cb(null, uniqueName);
+  },
+});
+
+const upload = multer({ storage: storage });
+
+// ✅ POST új termék (csak admin)
+router.post("/", verifyToken, verifyAdmin, upload.single("image"), async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
-    if (!product) {
-      return res.status(404).json({ message: "Termék nem található" });
+    const {
+      name,
+      description,
+      price,
+      weight,
+      category,
+      kiemelt,
+    } = req.body;
+
+    if (!name || !price || !category || !description) {
+      return res.status(400).json({ message: "Hiányzó mezők." });
     }
-    res.json(product);
+
+    // Allergének feldolgozása (JSON tömbként jön FormData-ból)
+    const allergens = req.body.allergens ? JSON.parse(req.body.allergens) : [];
+
+    const newProduct = new Product({
+      name,
+      description,
+      price,
+      allergens,
+      weight,
+      category,
+      kiemelt: kiemelt === "true" || kiemelt === true,
+      image: req.file ? `/uploads/${req.file.filename}` : null,
+    });
+
+    const saved = await newProduct.save();
+    res.status(201).json(saved);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error("Mentési hiba:", err);
+    res.status(500).json({ message: "Szerverhiba." });
   }
 });
 
-// GET all products (optionally filter featured)
+// ✅ GET összes termék
 router.get("/", async (req, res) => {
   try {
-    const { kiemelt } = req.query;
-    const filter = kiemelt ? { kiemelt: kiemelt === "true" } : {};
-    const products = await Product.find(filter);
+    const products = await Product.find();
     res.json(products);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
-// POST new product
-router.post("/", async (req, res) => {
+// ✅ GET egy termék ID alapján
+router.get("/:id", async (req, res) => {
   try {
-    const product = new Product(req.body);
-    const saved = await product.save();
-    res.status(201).json(saved);
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ message: "Termék nem található" });
+    res.json(product);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(500).json({ message: err.message });
   }
 });
 

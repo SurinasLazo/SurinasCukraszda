@@ -1,11 +1,10 @@
-// src/routes/order.js
 const express = require("express");
 const router = express.Router();
 const Order = require("../models/Order");
-const authMiddleware = require("../middleware/authMiddleware");
+const { verifyToken } = require("../middleware/authMiddleware");
 
 // POST /api/orders – új rendelés létrehozása
-router.post("/", authMiddleware, async (req, res) => {
+router.post("/", verifyToken, async (req, res) => {
   try {
     const { items, total } = req.body;
 
