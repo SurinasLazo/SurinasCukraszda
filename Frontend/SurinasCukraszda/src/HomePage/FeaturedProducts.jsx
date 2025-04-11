@@ -2,13 +2,15 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import "./FeaturedProducts.css";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const ProductCard = ({ product }) => {
-  const backendUrl = "http://localhost:5001"; 
   return (
     <div className="card" style={{ width: "18rem" }}>
       <img
-        src={product.image ? `${backendUrl}${product.image}` : "/placeholder.png"}
+        src={
+          product.image ? `${API_BASE_URL}${product.image}` : "/placeholder.png"
+        }
         className="card-img-top"
         alt={product.name}
       />
@@ -44,11 +46,17 @@ const FeaturedProducts = () => {
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
       try {
-        const { data } = await axios.get("http://localhost:5001/api/products?kiemelt=true");
+        const { data } = await axios.get(
+          `${API_BASE_URL}/api/products?kiemelt=true`
+        );
 
-        setFeaturedBakeryProducts(data.filter((p) => p.category === "sütemény"));
+        setFeaturedBakeryProducts(
+          data.filter((p) => p.category === "sütemény")
+        );
         setFeaturedIceCreamProducts(data.filter((p) => p.category === "fagyi"));
-        setFeaturedPackagedProducts(data.filter((p) => p.category === "csomagolt sütemény"));
+        setFeaturedPackagedProducts(
+          data.filter((p) => p.category === "csomagolt sütemény")
+        );
       } catch (error) {
         console.error("Hiba történt a termékek lekérésekor:", error);
       }
@@ -59,8 +67,14 @@ const FeaturedProducts = () => {
 
   return (
     <div className="container">
-      <ProductSection title="Kiemelt Sütemények" products={featuredBakeryProducts} />
-      <ProductSection title="Kiemelt Fagyik" products={featuredIceCreamProducts} />
+      <ProductSection
+        title="Kiemelt Sütemények"
+        products={featuredBakeryProducts}
+      />
+      <ProductSection
+        title="Kiemelt Fagyik"
+        products={featuredIceCreamProducts}
+      />
       <ProductSection
         title="Kiemelt Csomagolt Sütemények"
         products={featuredPackagedProducts}

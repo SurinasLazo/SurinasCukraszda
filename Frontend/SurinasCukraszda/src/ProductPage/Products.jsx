@@ -45,7 +45,7 @@ const Products = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:5001/api/products");
+        const response = await axios.get(`${API_BASE_URL}/api/products`);
         // Átalakítjuk az _id-t id-re, hogy kompatibilis legyen a régi kóddal
         const fetchedProducts = response.data.map((prod) => ({
           ...prod,
