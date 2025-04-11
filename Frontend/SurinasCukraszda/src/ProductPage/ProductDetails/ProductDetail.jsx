@@ -8,6 +8,7 @@ import useCartStore from "../../store/cartStore";
 import Header from "../../Header";
 import Footer from "../../Footer";
 import "./ProductDetail.css";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const ProductDetail = () => {
   const { productId } = useParams(); // A MongoDB _id
@@ -21,12 +22,14 @@ const ProductDetail = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`http://localhost:5001/api/products/${productId}`);
+        const response = await axios.get(
+          `${API_BASE_URL}/api/products/${productId}`
+        );
         const fetchedProduct = response.data;
-  
+
         // Itt állítod át az _id-t id-re:
         fetchedProduct.id = fetchedProduct._id;
-  
+
         setProduct(fetchedProduct);
       } catch (err) {
         console.error("Error fetching product:", err);
@@ -88,7 +91,13 @@ const ProductDetail = () => {
               {/* Bal oldali kép */}
               <div className="col-md-6 product-image d-flex justify-content-center mb-3 mb-md-0">
                 <div className="image-container">
-                <img src={product.image ? `http://localhost:5001${product.image}` : "/placeholder.png"}/>
+                  <img
+                    src={
+                      product.image
+                        ? `${API_BASE_URL}${product.image}`
+                        : "/placeholder.png"
+                    }
+                  />
                 </div>
               </div>
               {/* Jobb oldali információ */}
@@ -123,7 +132,10 @@ const ProductDetail = () => {
                 </table>
                 <div className="quantity-section text-center">
                   <div className="quantity-selector d-inline-flex align-items-center">
-                    <Button variant="outline-secondary" onClick={() => handleQuantityChange(-1)}>
+                    <Button
+                      variant="outline-secondary"
+                      onClick={() => handleQuantityChange(-1)}
+                    >
                       -
                     </Button>
                     <Form.Control
@@ -133,12 +145,19 @@ const ProductDetail = () => {
                       onChange={handleInputChange}
                       min="1"
                     />
-                    <Button variant="outline-secondary" onClick={() => handleQuantityChange(1)}>
+                    <Button
+                      variant="outline-secondary"
+                      onClick={() => handleQuantityChange(1)}
+                    >
                       +
                     </Button>
                   </div>
                   <div className="mt-3">
-                    <Button variant="primary" className="btn-cart" onClick={handleAddToCart}>
+                    <Button
+                      variant="primary"
+                      className="btn-cart"
+                      onClick={handleAddToCart}
+                    >
                       Kosárba teszem
                     </Button>
                   </div>

@@ -2,9 +2,23 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../store/authStore";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const AdminProductCreate = () => {
   const navigate = useNavigate();
   const token = useAuthStore((state) => state.token);
+
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    price: "",
+    weight: "",
+    category: "sütemény",
+    kiemelt: false,
+    image: null,
+  });
+
+  const [allergens, setAllergens] = useState([]);
 
   const ALLERGEN_OPTIONS = [
     "Glutén",
@@ -15,17 +29,6 @@ const AdminProductCreate = () => {
     "Szója",
     "Szezámmag",
   ];
-
-  const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    price: "",
-    allergens: [],
-    weight: "",
-    category: "sütemény",
-    kiemelt: false,
-    image: null,
-  });
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
@@ -38,14 +41,11 @@ const AdminProductCreate = () => {
     }
   };
 
-  const handleAllergenChange = (event) => {
-    const { value, checked } = event.target;
-    setFormData((prev) => ({
-      ...prev,
-      allergens: checked
-        ? [...prev.allergens, value]
-        : prev.allergens.filter((item) => item !== value),
-    }));
+  const handleAllergenChange = (e) => {
+    const { value, checked } = e.target;
+    setAllergens((prev) =>
+      checked ? [...prev, value] : prev.filter((item) => item !== value)
+    );
   };
 
   const handleSubmit = async (e) => {
@@ -55,16 +55,16 @@ const AdminProductCreate = () => {
     payload.append("name", formData.name);
     payload.append("description", formData.description);
     payload.append("price", formData.price);
-    payload.append("allergens", JSON.stringify(formData.allergens));
     payload.append("weight", formData.weight);
     payload.append("category", formData.category);
     payload.append("kiemelt", formData.kiemelt);
+    payload.append("allergens", JSON.stringify(allergens));
     if (formData.image) {
       payload.append("image", formData.image);
     }
 
     try {
-      const response = await fetch("http://localhost:5001/api/products", {
+      const response = await fetch(`${API_BASE_URL}/api/products`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -73,7 +73,6 @@ const AdminProductCreate = () => {
       });
 
       if (!response.ok) throw new Error("Sikertelen mentés");
-
       navigate("/admin/products");
     } catch (error) {
       console.error("Hiba:", error);
@@ -131,7 +130,7 @@ const AdminProductCreate = () => {
                     className="form-check-input"
                     type="checkbox"
                     value={allergen}
-                    checked={formData.allergens.includes(allergen)}
+                    checked={allergens.includes(allergen)}
                     onChange={handleAllergenChange}
                     id={`allergen-${allergen}`}
                   />

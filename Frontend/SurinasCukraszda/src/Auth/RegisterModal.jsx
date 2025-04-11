@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
 import "./Modal.css";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const RegisterModal = ({ show, handleClose, switchToLogin }) => {
   const [name, setName] = useState("");
@@ -16,7 +17,7 @@ const RegisterModal = ({ show, handleClose, switchToLogin }) => {
       return;
     }
     try {
-      await axios.post("http://localhost:5001/api/auth/register", {
+      await axios.post(`${API_BASE_URL}/api/auth/register`, {
         name,
         email,
         password,

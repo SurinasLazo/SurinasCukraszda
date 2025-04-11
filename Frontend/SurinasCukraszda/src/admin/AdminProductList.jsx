@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import useAuthStore from "../store/authStore";
 import "./AdminProductList.css";
 import Footer from "../Footer";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const AdminProductList = () => {
   const [products, setProducts] = useState([]);
@@ -12,7 +13,7 @@ const AdminProductList = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("http://localhost:5001/api/products", {
+        const res = await fetch(`${API_BASE_URL}/api/products`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -4,6 +4,7 @@ import { Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
 import "./Modal.css";
 import useAuthStore from "../store/authStore";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const LoginModal = ({ show, handleClose, switchToRegister }) => {
   useEffect(() => {
@@ -19,16 +20,26 @@ const LoginModal = ({ show, handleClose, switchToRegister }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5001/api/auth/login", {
+      const response = await axios.post(`${API_BASE_URL}/api/auth/login`, {
         email,
         password,
       });
       const token = response.data.token;
       // Dekódoljuk a JWT payloadot.
       const payload = JSON.parse(atob(token.split(".")[1]));
-      login({ id: payload.id, email: payload.email, role: payload.role }, token);
+      login(
+        { id: payload.id, email: payload.email, role: payload.role },
+        token
+      );
       localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify({ id: payload.id, email: payload.email, role: payload.role }));
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          id: payload.id,
+          email: payload.email,
+          role: payload.role,
+        })
+      );
       handleClose();
       console.log("Sikeres bejelentkezés!");
     } catch (error) {
@@ -71,7 +82,9 @@ const LoginModal = ({ show, handleClose, switchToRegister }) => {
               required
             />
           </Form.Group>
-          {errorMessage && <div className="text-danger mt-2">{errorMessage}</div>}
+          {errorMessage && (
+            <div className="text-danger mt-2">{errorMessage}</div>
+          )}
           <Button variant="primary" type="submit" className="mt-3" block>
             Belépés
           </Button>
