@@ -88,11 +88,7 @@ const ProductDetail = () => {
               {/* Bal oldali kép */}
               <div className="col-md-6 product-image d-flex justify-content-center mb-3 mb-md-0">
                 <div className="image-container">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="img-fluid"
-                  />
+                <img src={product.image ? `http://localhost:5001${product.image}` : "/placeholder.png"}/>
                 </div>
               </div>
               {/* Jobb oldali információ */}

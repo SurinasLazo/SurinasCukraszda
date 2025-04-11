@@ -1,0 +1,73 @@
+.admin-container {
+  background-color: #fff8ef;
+  padding: 30px;
+  border-radius: 8px;
+  max-width: 1000px;
+  margin: 60px auto 40px auto; /* középre hozza a dobozt */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.admin-container h2 {
+  color: #aa1f22;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.admin-container .btn-success {
+  background-color: #28a745;
+  border: none;
+  margin-bottom: 20px;
+}
+
+.admin-container .btn-success:hover {
+  background-color: #218838;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.admin-table th {
+  background-color: #eb7424;
+  color: white;
+}
+
+.admin-table td button {
+  margin-right: 6px;
+  margin-bottom: 4px;
+}
+
+.admin-table .btn-warning {
+  background-color: #ffc107;
+  border: none;
+}
+
+.admin-table .btn-warning:hover {
+  background-color: #e0a800;
+}
+
+.admin-table .btn-danger {
+  background-color: #dc3545;
+  border: none;
+}
+
+.admin-table .btn-danger:hover {
+  background-color: #c82333;
+}
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content-wrap {
+  flex: 1;
+}

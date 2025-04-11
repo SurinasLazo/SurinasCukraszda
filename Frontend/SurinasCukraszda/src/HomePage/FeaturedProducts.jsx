@@ -3,18 +3,25 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import "./FeaturedProducts.css";
 
-const ProductCard = ({ product }) => (
-  <div className="card" style={{ width: "18rem" }}>
-    <img src={product.image} className="card-img-top" alt={product.name} />
-    <div className="card-body">
-      <h5 className="card-title">{product.name}</h5>
-      <p className="card-text">Ár: {product.price} Ft</p>
-      <Link to={`/product/${product._id}`} className="btn btn-primary">
-        Részletek
-      </Link>
+const ProductCard = ({ product }) => {
+  const backendUrl = "http://localhost:5001"; 
+  return (
+    <div className="card" style={{ width: "18rem" }}>
+      <img
+        src={product.image ? `${backendUrl}${product.image}` : "/placeholder.png"}
+        className="card-img-top"
+        alt={product.name}
+      />
+      <div className="card-body">
+        <h5 className="card-title">{product.name}</h5>
+        <p className="card-text">Ár: {product.price} Ft</p>
+        <Link to={`/product/${product._id}`} className="btn btn-primary">
+          Részletek
+        </Link>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const ProductSection = ({ title, products }) => (
   <div className="product-section">

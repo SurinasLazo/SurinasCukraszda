@@ -7,7 +7,7 @@ import Footer from "../Footer";
 
 const ProductCard = ({ product }) => (
   <div className="card" style={{ width: "18rem" }}>
-    <img src={product.image} className="card-img-top" alt={product.name} />
+   <img src={product.image ? `http://localhost:5001${product.image}` : "/placeholder.png"}  />
     <div className="card-body">
       <h5 className="card-title">{product.name}</h5>
       <p className="card-text">Ár: {product.price} Ft</p>
