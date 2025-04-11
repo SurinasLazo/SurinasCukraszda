@@ -1,3 +1,4 @@
+// server.js
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
@@ -5,35 +6,47 @@ const mongoose = require("mongoose");
 
 const app = express();
 
-// Middleware-ek
+// Alap middleware-ek
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://surinas-cukraszda.netlify.app",
+];
+
 app.use(
   cors({
-    origin: "http://localhost:5173", // vagy később a Netlify domain
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    origin: allowedOrigins,
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+app.options("*", cors());
 app.use(express.json());
-app.use("/uploads", express.static("uploads"));
 
-// MongoDB kapcsolódás
+// MongoDB csatlakozás
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
-// ROUTE-ok betöltése
-const authRoutes = require("./src/routes/auth");
-const orderRoutes = require("./src/routes/order");
-const productRoutes = require("./src/routes/product"); 
+// Termékek route-ok
+const productRoutes = require("./src/routes/Product");
+app.use("/api/products", productRoutes);
 
+// Auth route-ok – fontos, hogy ezt is regisztráld!
+const authRoutes = require("./src/routes/auth");
 app.use("/api/auth", authRoutes);
-app.use("/api/orders", orderRoutes);
-app.use("/api/products", productRoutes); // <- létrehozás
+
+// További route-ok (pl. order stb.) itt jöhetnek majd
 
 // Szerver indítása
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+const orderRoutes = require("./src/routes/order");
+app.use("/api/orders", orderRoutes);
