@@ -8,7 +8,7 @@ const ProductCard = ({ product }) => {
   return (
     <div className="card" style={{ width: "18rem" }}>
       <img
-        src={`data:${product.image.contentType};base64,${product.image.data}`}
+        src={`${API_BASE_URL}/api/products/${product.id}/image`}
         className="card-img-top"
         alt={product.name}
       />

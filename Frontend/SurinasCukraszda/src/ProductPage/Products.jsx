@@ -8,9 +8,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const ProductCard = ({ product }) => (
   <div className="card" style={{ width: "18rem" }}>
-    <img
-      src={`data:${product.image.contentType};base64,${product.image.data}`}
-    />
+    <img src={`${API_BASE_URL}/api/products/${product.id}/image`} />
     <div className="card-body">
       <h5 className="card-title">{product.name}</h5>
       <p className="card-text">Ár: {product.price} Ft</p>
