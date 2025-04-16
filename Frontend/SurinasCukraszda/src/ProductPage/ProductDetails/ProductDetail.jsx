@@ -92,11 +92,7 @@ const ProductDetail = () => {
               <div className="col-md-6 product-image d-flex justify-content-center mb-3 mb-md-0">
                 <div className="image-container">
                   <img
-                    src={
-                      product.image
-                        ? `${API_BASE_URL}${product.image}`
-                        : "/placeholder.png"
-                    }
+                    src={`data:${product.image.contentType};base64,${product.image.data}`}
                   />
                 </div>
               </div>

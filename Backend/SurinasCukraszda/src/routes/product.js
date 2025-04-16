@@ -18,45 +18,51 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// ✅ POST új termék (csak admin)
-router.post("/", verifyToken, verifyAdmin, upload.single("image"), async (req, res) => {
-  try {
-    const {
-      name,
-      description,
-      price,
-      weight,
-      category,
-      kiemelt,
-    } = req.body;
+//  POST új termék (csak admin)
+router.post(
+  "/",
+  verifyToken,
+  verifyAdmin,
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      const { name, description, price, weight, category, kiemelt } = req.body;
 
-    if (!name || !price || !category || !description) {
-      return res.status(400).json({ message: "Hiányzó mezők." });
+      if (!name || !price || !category || !description) {
+        return res.status(400).json({ message: "Hiányzó mezők." });
+      }
+
+      const allergens = req.body.allergens
+        ? JSON.parse(req.body.allergens)
+        : [];
+
+      const newProduct = new Product({
+        name,
+        description,
+        price,
+        allergens,
+        weight,
+        category,
+        kiemelt: kiemelt === "true" || kiemelt === true,
+      });
+
+      if (req.file) {
+        newProduct.image = {
+          data: req.file.buffer,
+          contentType: req.file.mimetype,
+        };
+      }
+
+      const saved = await newProduct.save();
+      res.status(201).json(saved);
+    } catch (err) {
+      console.error("Mentési hiba:", err);
+      res.status(500).json({ message: "Szerverhiba." });
     }
-
-    // Allergének feldolgozása (JSON tömbként jön FormData-ból)
-    const allergens = req.body.allergens ? JSON.parse(req.body.allergens) : [];
-
-    const newProduct = new Product({
-      name,
-      description,
-      price,
-      allergens,
-      weight,
-      category,
-      kiemelt: kiemelt === "true" || kiemelt === true,
-      image: req.file ? `/uploads/${req.file.filename}` : null,
-    });
-
-    const saved = await newProduct.save();
-    res.status(201).json(saved);
-  } catch (err) {
-    console.error("Mentési hiba:", err);
-    res.status(500).json({ message: "Szerverhiba." });
   }
-});
+);
 
-// ✅ GET összes termék
+//  GET összes termék
 router.get("/", async (req, res) => {
   try {
     const products = await Product.find();
@@ -66,11 +72,12 @@ router.get("/", async (req, res) => {
   }
 });
 
-// ✅ GET egy termék ID alapján
+//  GET egy termék ID alapján
 router.get("/:id", async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
-    if (!product) return res.status(404).json({ message: "Termék nem található" });
+    if (!product)
+      return res.status(404).json({ message: "Termék nem található" });
     res.json(product);
   } catch (err) {
     res.status(500).json({ message: err.message });
