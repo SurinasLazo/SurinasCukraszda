@@ -73,6 +73,44 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+router.put(
+  "/:id",
+  verifyToken,
+  verifyAdmin,
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      const product = await Product.findById(req.params.id);
+      if (!product)
+        return res.status(404).json({ message: "Termék nem található" });
+
+      product.name = req.body.name;
+      product.description = req.body.description;
+      product.price = req.body.price;
+      product.weight = req.body.weight;
+      product.category = req.body.category;
+      product.kiemelt =
+        req.body.kiemelt === "true" || req.body.kiemelt === true;
+      product.allergens = req.body.allergens
+        ? JSON.parse(req.body.allergens)
+        : [];
+
+      if (req.file) {
+        product.image = {
+          data: req.file.buffer,
+          contentType: req.file.mimetype,
+        };
+      }
+
+      const updated = await product.save();
+      res.json(updated);
+    } catch (err) {
+      console.error("Termék frissítési hiba:", err);
+      res.status(500).json({ message: "Szerverhiba a frissítéskor" });
+    }
+  }
+);
+
 // Kép kiszolgálása base64 formátumban
 router.get("/:id/image", async (req, res) => {
   try {
@@ -87,6 +125,20 @@ router.get("/:id/image", async (req, res) => {
   } catch (err) {
     console.error("Kép lekérési hiba:", err);
     res.status(500).send("Szerverhiba.");
+  }
+});
+
+// DELETE egy termék ID alapján (csak admin)
+router.delete("/:id", verifyToken, verifyAdmin, async (req, res) => {
+  try {
+    const deleted = await Product.findByIdAndDelete(req.params.id);
+    if (!deleted) {
+      return res.status(404).json({ message: "A termék nem található" });
+    }
+    res.json({ message: "Termék sikeresen törölve" });
+  } catch (err) {
+    console.error("Törlés hiba:", err);
+    res.status(500).json({ message: "Szerverhiba törlés közben" });
   }
 });
 

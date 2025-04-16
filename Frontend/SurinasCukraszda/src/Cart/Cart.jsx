@@ -102,7 +102,9 @@ const Cart = () => {
                   >
                     <div className="col-md-2">
                       <img
-                        src={item.image}
+                        src={`${
+                          import.meta.env.VITE_API_BASE_URL
+                        }/api/products/${item.id}/image`}
                         alt={item.name}
                         className="img-fluid cart-item-img"
                       />
