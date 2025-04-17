@@ -3,16 +3,36 @@ import { useNavigate } from "react-router-dom";
 import useAuthStore from "../store/authStore";
 import "./AdminProductList.css";
 import Footer from "../Footer";
+import axios from "axios";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const AdminProductList = () => {
   const [products, setProducts] = useState([]);
   const token = useAuthStore((state) => state.token);
   const navigate = useNavigate();
 
+  const handleDelete = async (productId) => {
+    if (!window.confirm("Biztosan törölni szeretnéd ezt a terméket?")) return;
+
+    try {
+      await axios.delete(`${API_BASE_URL}/api/products/${productId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Frissítjük a listát
+      setProducts((prev) => prev.filter((p) => p._id !== productId));
+    } catch (err) {
+      console.error("Törlési hiba:", err);
+      alert("Hiba történt a termék törlése során.");
+    }
+  };
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("http://localhost:5001/api/products", {
+        const res = await fetch(`${API_BASE_URL}/api/products`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -65,7 +85,7 @@ const AdminProductList = () => {
                       </button>
                       <button
                         className="btn btn-danger btn-sm"
-                        onClick={() => alert("Törlés később!")}
+                        onClick={() => handleDelete(product._id)}
                       >
                         Törlés
                       </button>

@@ -7,14 +7,17 @@ import Header from "../Header";
 import Footer from "../Footer";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Cart = () => {
-  const { cart, removeFromCart, updateQuantity, clearCart } = useCartStore((state) => ({
-    cart: state.cart,
-    removeFromCart: state.removeFromCart,
-    updateQuantity: state.updateQuantity,
-    clearCart: state.clearCart,
-  }));
+  const { cart, removeFromCart, updateQuantity, clearCart } = useCartStore(
+    (state) => ({
+      cart: state.cart,
+      removeFromCart: state.removeFromCart,
+      updateQuantity: state.updateQuantity,
+      clearCart: state.clearCart,
+    })
+  );
 
   const user = useAuthStore((state) => state.user);
   const token = useAuthStore((state) => state.token);
@@ -51,7 +54,7 @@ const Cart = () => {
     if (cart.length === 0) return toast.error("A kosár üres!");
 
     try {
-      const response = await fetch("http://localhost:5001/api/orders", {
+      const response = await fetch(`${API_BASE_URL}/api/orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -93,10 +96,15 @@ const Cart = () => {
             <>
               <div className="cart-items">
                 {cart.map((item) => (
-                  <div key={item.id} className="cart-item row align-items-center">
+                  <div
+                    key={item.id}
+                    className="cart-item row align-items-center"
+                  >
                     <div className="col-md-2">
                       <img
-                        src={item.image}
+                        src={`${
+                          import.meta.env.VITE_API_BASE_URL
+                        }/api/products/${item.id}/image`}
                         alt={item.name}
                         className="img-fluid cart-item-img"
                       />
@@ -146,7 +154,9 @@ const Cart = () => {
               </div>
               <div className="cart-summary mt-4">
                 <h3>Összesen: {totalPrice} Ft</h3>
-                <button className="btn btn-primary" onClick={handleOrderSubmit}>Fizetés</button>
+                <button className="btn btn-primary" onClick={handleOrderSubmit}>
+                  Fizetés
+                </button>
               </div>
             </>
           )}

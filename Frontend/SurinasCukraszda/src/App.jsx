@@ -13,6 +13,7 @@ import ProductDetail from "./ProductPage/ProductDetails/ProductDetail";
 import Cart from "./Cart/Cart";
 import AdminProductList from "./admin/AdminProductList";
 import AdminProductCreate from "./admin/AdminProductCreate";
+import AdminProductEdit from "./admin/AdminProductEdit";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/product/:productId" element={<ProductDetail />} />
         <Route path="/admin/products" element={<AdminProductList />} />
         <Route path="/admin/products/create" element={<AdminProductCreate />} />
+        <Route path="/admin/products/edit/:id" element={<AdminProductEdit />} />
       </Routes>
     </Router>
   );

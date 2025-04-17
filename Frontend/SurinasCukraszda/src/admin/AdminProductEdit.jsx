@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 import useAuthStore from "../store/authStore";
-
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-const AdminProductCreate = () => {
+const AdminProductEdit = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const token = useAuthStore((state) => state.token);
 
@@ -12,13 +13,14 @@ const AdminProductCreate = () => {
     name: "",
     description: "",
     price: "",
+    allergens: [],
     weight: "",
     category: "sütemény",
     kiemelt: false,
     image: null,
   });
 
-  const [allergens, setAllergens] = useState([]);
+  const [existingImageUrl, setExistingImageUrl] = useState("");
 
   const ALLERGEN_OPTIONS = [
     "Glutén",
@@ -29,6 +31,35 @@ const AdminProductCreate = () => {
     "Szója",
     "Szezámmag",
   ];
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const res = await axios.get(`${API_BASE_URL}/api/products/${id}`);
+        const product = res.data;
+
+        setFormData({
+          name: product.name || "",
+          description: product.description || "",
+          price: product.price || "",
+          allergens: product.allergens || [],
+          weight: product.weight || "",
+          category: product.category || "sütemény",
+          kiemelt: product.kiemelt || false,
+          image: null,
+        });
+
+        setExistingImageUrl(
+          `${API_BASE_URL}/api/products/${product._id}/image`
+        );
+      } catch (err) {
+        console.error("Hiba a termék lekérésekor:", err);
+        alert("Nem sikerült betölteni a terméket.");
+      }
+    };
+
+    fetchProduct();
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
@@ -43,9 +74,12 @@ const AdminProductCreate = () => {
 
   const handleAllergenChange = (e) => {
     const { value, checked } = e.target;
-    setAllergens((prev) =>
-      checked ? [...prev, value] : prev.filter((item) => item !== value)
-    );
+    setFormData((prev) => {
+      const updatedAllergens = checked
+        ? [...prev.allergens, value]
+        : prev.allergens.filter((a) => a !== value);
+      return { ...prev, allergens: updatedAllergens };
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -58,41 +92,42 @@ const AdminProductCreate = () => {
     payload.append("weight", formData.weight);
     payload.append("category", formData.category);
     payload.append("kiemelt", formData.kiemelt);
-    payload.append("allergens", JSON.stringify(allergens));
+    payload.append("allergens", JSON.stringify(formData.allergens));
     if (formData.image) {
       payload.append("image", formData.image);
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/products`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: payload,
-      });
-
-      if (!response.ok) throw new Error("Sikertelen mentés");
-      navigate("/admin/products");
-    } catch (error) {
-      console.error("Hiba:", error);
-      alert("Hiba történt a termék létrehozása során.");
+      const res = await axios.put(
+        `${API_BASE_URL}/api/products/${id}`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      window.location.href = "/admin/products";
+    } catch (err) {
+      console.error("Hiba mentéskor:", err);
+      alert("Nem sikerült módosítani a terméket.");
     }
   };
 
   return (
     <div className="admin-wrapper">
       <div className="admin-container">
-        <h2>Új termék létrehozása</h2>
+        <h2>Termék szerkesztése</h2>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div className="mb-3">
             <label className="form-label">Név</label>
             <input
               type="text"
               name="name"
+              className="form-control"
               value={formData.name}
               onChange={handleChange}
-              className="form-control"
               required
             />
           </div>
@@ -101,24 +136,48 @@ const AdminProductCreate = () => {
             <label className="form-label">Leírás</label>
             <textarea
               name="description"
+              className="form-control"
               value={formData.description}
               onChange={handleChange}
-              className="form-control"
-              rows="3"
               required
             />
           </div>
 
           <div className="mb-3">
-            <label className="form-label">Ár (Ft)</label>
+            <label className="form-label">Ár</label>
             <input
               type="number"
               name="price"
+              className="form-control"
               value={formData.price}
               onChange={handleChange}
-              className="form-control"
               required
             />
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label">Súly / Mennyiség</label>
+            <input
+              type="text"
+              name="weight"
+              className="form-control"
+              value={formData.weight}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label">Kategória</label>
+            <select
+              name="category"
+              className="form-select"
+              value={formData.category}
+              onChange={handleChange}
+            >
+              <option value="sütemény">Sütemény</option>
+              <option value="fagyi">Fagyi</option>
+              <option value="csomagolt sütemény">Csomagolt sütemény</option>
+            </select>
           </div>
 
           <div className="mb-3">
@@ -130,7 +189,7 @@ const AdminProductCreate = () => {
                     className="form-check-input"
                     type="checkbox"
                     value={allergen}
-                    checked={allergens.includes(allergen)}
+                    checked={formData.allergens.includes(allergen)}
                     onChange={handleAllergenChange}
                     id={`allergen-${allergen}`}
                   />
@@ -145,31 +204,6 @@ const AdminProductCreate = () => {
             </div>
           </div>
 
-          <div className="mb-3">
-            <label className="form-label">Súly / Mennyiség</label>
-            <input
-              type="text"
-              name="weight"
-              value={formData.weight}
-              onChange={handleChange}
-              className="form-control"
-            />
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label">Kategória</label>
-            <select
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              className="form-select"
-            >
-              <option value="sütemény">Sütemény</option>
-              <option value="fagyi">Fagyi</option>
-              <option value="csomagolt sütemény">Csomagolt sütemény</option>
-            </select>
-          </div>
-
           <div className="form-check mb-3">
             <input
               className="form-check-input"
@@ -177,12 +211,28 @@ const AdminProductCreate = () => {
               name="kiemelt"
               checked={formData.kiemelt}
               onChange={handleChange}
+              id="kiemelt"
             />
-            <label className="form-check-label">Kiemelt termék</label>
+            <label className="form-check-label" htmlFor="kiemelt">
+              Kiemelt termék
+            </label>
           </div>
 
           <div className="mb-3">
             <label className="form-label">Kép feltöltése</label>
+            {existingImageUrl && (
+              <div className="mb-2">
+                <img
+                  src={`${existingImageUrl}?updated=${Date.now()}`}
+                  alt="Aktuális termékkép"
+                  style={{
+                    width: "150px",
+                    borderRadius: "8px",
+                    border: "1px solid #ccc",
+                  }}
+                />
+              </div>
+            )}
             <input
               type="file"
               name="image"
@@ -201,4 +251,4 @@ const AdminProductCreate = () => {
   );
 };
 
-export default AdminProductCreate;
+export default AdminProductEdit;

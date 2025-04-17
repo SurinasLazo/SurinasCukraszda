@@ -4,10 +4,11 @@ import { Link } from "react-router-dom";
 import "./Products.css";
 import Header from "../Header";
 import Footer from "../Footer";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const ProductCard = ({ product }) => (
   <div className="card" style={{ width: "18rem" }}>
-   <img src={product.image ? `http://localhost:5001${product.image}` : "/placeholder.png"}  />
+    <img src={`${API_BASE_URL}/api/products/${product.id}/image`} />
     <div className="card-body">
       <h5 className="card-title">{product.name}</h5>
       <p className="card-text">Ár: {product.price} Ft</p>
@@ -40,11 +41,11 @@ const Products = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:5001/api/products");
+        const response = await axios.get(`${API_BASE_URL}/api/products`);
         // Átalakítjuk az _id-t id-re, hogy kompatibilis legyen a régi kóddal
         const fetchedProducts = response.data.map((prod) => ({
           ...prod,
-          id: prod._id
+          id: prod._id,
         }));
         setProducts(fetchedProducts);
         setLoading(false);
@@ -59,10 +60,10 @@ const Products = () => {
   }, []);
 
   const categoryTitles = {
-    "sütemény": "Sütemények",
+    sütemény: "Sütemények",
     "csomagolt sütemény": "Csomagolt Sütemények",
-    "fagyi": "Fagylalt",
-    "összes": "Összes termék"
+    fagyi: "Fagylalt",
+    összes: "Összes termék",
   };
 
   let filteredProducts = products;
@@ -84,7 +85,9 @@ const Products = () => {
           {Object.keys(categoryTitles).map((catKey) => (
             <li key={catKey} className="nav-item">
               <button
-                className={`nav-link ${selectedCategory === catKey ? "active" : ""}`}
+                className={`nav-link ${
+                  selectedCategory === catKey ? "active" : ""
+                }`}
                 onClick={() => setSelectedCategory(catKey)}
               >
                 {categoryTitles[catKey]}
