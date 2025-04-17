@@ -10,7 +10,7 @@ const app = express();
 app.use(
   cors({
     origin: ["http://localhost:5173", "https://surinas-cukraszda.netlify.app"],
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
@@ -34,11 +34,13 @@ mongoose
 // ROUTE-ok
 const authRoutes = require("./src/routes/auth");
 const orderRoutes = require("./src/routes/order");
-const productRoutes = require("./src/routes/product"); // figyelem: kisbetű!
+const productRoutes = require("./src/routes/product");
+const adminOrdersRoutes = require("./src/routes/adminOrders");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/admin/orders", adminOrdersRoutes);
 
 // Szerver indítása (Render automatikusan PORT változót használ)
 const PORT = process.env.PORT || 5000;

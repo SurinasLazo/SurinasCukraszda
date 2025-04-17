@@ -9,13 +9,13 @@ const User = require("../models/User");
 router.post("/register", async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
-    
+
     // Ellenőrizzük, hogy létezik-e már ilyen user
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
-    
+
     // Jelszó hash-elése
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({
@@ -24,7 +24,7 @@ router.post("/register", async (req, res) => {
       password: hashedPassword,
       role: role || "user", // alapértelmezett role: user
     });
-    
+
     await user.save();
     res.status(201).json({ message: "User registered successfully" });
   } catch (err) {
@@ -61,15 +61,17 @@ router.post("/login", async (req, res) => {
       token,
       user: {
         id: user._id.toString(),
+        name: user.name,
         email: user.email,
         role: user.role,
       },
     });
   } catch (error) {
     console.error("Login error:", error);
-    return res.status(500).json({ message: "Szerverhiba a bejelentkezés során" });
+    return res
+      .status(500)
+      .json({ message: "Szerverhiba a bejelentkezés során" });
   }
 });
-
 
 module.exports = router;

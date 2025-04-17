@@ -1,65 +1,74 @@
+// src/store/cartStore.ts
 import { createWithEqualityFn } from "zustand/traditional";
-import { StateCreator } from "zustand";
-import { combine, persist } from "zustand/middleware";
+import { persist } from "zustand/middleware";
 import { shallow } from "zustand/shallow";
-import { Product } from "../types/Product";
-import { socket } from "../socket/socket";
+import type { Product } from "../types/Product";
 
-interface CartState {
-  cart: (Product & { quantity: number })[];
+export interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
 }
 
-const initialState: CartState = {
-  cart: [],
-};
+interface CartState {
+  cart: CartItem[];
+}
 
-interface CartStateMutations {
+interface CartActions {
   addToCart: (product: Product, quantity: number) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
 }
 
-const mutations: StateCreator<CartState, [], [], CartStateMutations> = (
-  set,
-  get
-) => ({
-  addToCart: (product, quantity) =>
-    set((state) => {
-      // Check if the product already exists in the cart
-      const existingItem = state.cart.find((item) => item.id === product.id);
+type StoreState = CartState & CartActions;
 
-      if (existingItem) {
-        return {
-          cart: state.cart.map((item) =>
-            item.id === product.id
-              ? { ...item, quantity: item.quantity + quantity }
-              : item
+const useCartStore = createWithEqualityFn<
+  StoreState,
+  // Itt mondjuk meg, hogy van egy persisztencia-mutatórunk,
+  // amely StoreState-t ment:
+  [["zustand/persist", StoreState]]
+>(
+  persist(
+    (set, get) => ({
+      cart: [],
+      addToCart: (product, quantity) => {
+        set((state) => {
+          const idx = state.cart.findIndex((i) => i.id === product.id);
+          if (idx > -1) {
+            const cart = [...state.cart];
+            cart[idx].quantity += quantity;
+            return { cart };
+          }
+          const newItem: CartItem = {
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            quantity,
+          };
+          return { cart: [...state.cart, newItem] };
+        });
+      },
+      removeFromCart: (productId) =>
+        set((state) => ({
+          cart: state.cart.filter((i) => i.id !== productId),
+        })),
+      updateQuantity: (productId, quantity) =>
+        set((state) => ({
+          cart: state.cart.map((i) =>
+            i.id === productId ? { ...i, quantity } : i
           ),
-        };
-      } else {
-        return { cart: [...state.cart, { ...product, quantity }] };
-      }
+        })),
+      clearCart: () => set({ cart: [] }),
     }),
-  removeFromCart: (productId) =>
-    set((state) => ({
-      cart: state.cart.filter((item) => item.id !== productId),
-    })),
-  updateQuantity: (productId, quantity) =>
-    set((state) => ({
-      cart: state.cart.map((item) =>
-        item.id === productId ? { ...item, quantity } : item
-      ),
-    })),
-
-  clearCart: () => set({ cart: [] }), 
-
-});
-
-const useCartStore = createWithEqualityFn(
-  persist(combine(initialState, mutations), {
-    name: "cartStore",
-  }),
+    {
+      name: "cartStore",
+      partialize: (state) => ({ cart: state.cart }),
+      onError: (err) => console.error("Cart persist error:", err),
+      // ha sessionStorage‑t akarsz: getStorage: () => sessionStorage
+    }
+  ),
   shallow
 );
 

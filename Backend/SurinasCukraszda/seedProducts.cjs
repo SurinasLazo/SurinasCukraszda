@@ -1,12 +1,11 @@
-// seedProducts.cjs
-
 require("dotenv").config();
 const mongoose = require("mongoose");
 const Product = require("./src/models/Product");
 
 // Ha a products fájl ES modulként exportálja a tömböt,
 // akkor a require() által visszakapott objektum tartalmaz egy default property-t.
-const products = require("../../Frontend/SurinasCukraszda/src/data/products").default;
+const products =
+  require("../../Frontend/SurinasCukraszda/src/data/products").default;
 
 const formattedProducts = products.map(({ id, ...rest }) => rest);
 
