@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import ProductCard from "../components/ProductCard";
+import ProductCard from "../Components/ProductCard";
 import "./FeaturedProducts.css";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
