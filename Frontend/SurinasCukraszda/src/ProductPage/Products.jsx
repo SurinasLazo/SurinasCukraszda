@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Header from "../Header";
 import Footer from "../Footer";
-import ProductCard from "../components/ProductCard";
+import ProductCard from "../Components/ProductCard";
 import { Box, Tabs, Tab } from "@mui/material";
 import "./Products.css";
 
