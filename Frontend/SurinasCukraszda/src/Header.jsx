@@ -176,6 +176,17 @@ export default function Header() {
                         </ul>
                       </li>
                     )}
+                    {user && (
+                      <li className="nav-item">
+                        <Link
+                          className="nav-link"
+                          to="/profile"
+                          onClick={collapseNav}
+                        >
+                          Profil
+                        </Link>
+                      </li>
+                    )}
                     <li className="nav-item">
                       <button
                         className="btn btn-link nav-link"

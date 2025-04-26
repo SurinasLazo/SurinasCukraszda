@@ -14,7 +14,6 @@
   font-size: 2rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
-  /* Balra hagyjuk, mert máshol nem akarod túlszabályozni */
   text-align: left;
 }
 
@@ -42,7 +41,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  font-size: 0.9rem;
   color: #555;
   margin-top: 0.5rem;
 }
