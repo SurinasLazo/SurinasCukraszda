@@ -1,15 +1,18 @@
+// src/pages/Products.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import Header from "../Header";
 import Footer from "../Footer";
-import ProductCard from "../components/ProductCard"; // ← ide import
+import ProductCard from "../components/ProductCard";
+import { Box, Tabs, Tab } from "@mui/material";
 import "./Products.css";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const ProductSection = ({ title, products }) => {
-  if (!products.length) return <p>Nincs termék ebben a kategóriában.</p>;
+  if (!products.length) {
+    return <p className="text-center">Nincs termék ebben a kategóriában.</p>;
+  }
   return (
     <section className="product-section mb-5">
       <h2 className="section-title">{title}</h2>
@@ -31,17 +34,16 @@ export default function Products() {
   const [error, setError] = useState("");
 
   const categoryTitles = {
+    összes: "Összes termék",
     sütemény: "Sütemények",
     "csomagolt sütemény": "Csomagolt Sütemények",
     fagyi: "Fagylalt",
-    összes: "Összes termék",
   };
 
   useEffect(() => {
     axios
       .get(`${API_BASE_URL}/api/products`)
       .then((res) => {
-        // alakítsd át az _id-t id-re
         const fetched = res.data.map((p) => ({ ...p, id: p._id }));
         setProducts(fetched);
       })
@@ -55,7 +57,10 @@ export default function Products() {
   if (loading) return <p className="text-center">Töltés…</p>;
   if (error) return <p className="text-center text-danger">{error}</p>;
 
-  // szűrés
+  const handleTabChange = (_e, newCategory) => {
+    setSelectedCategory(newCategory);
+  };
+
   const filtered =
     selectedCategory === "összes"
       ? products
@@ -65,23 +70,48 @@ export default function Products() {
     <>
       <Header />
       <div className="container py-4">
-        {/* tabok */}
-        <ul className="nav nav-tabs">
-          {Object.entries(categoryTitles).map(([key, label]) => (
-            <li key={key} className="nav-item">
-              <button
-                className={`nav-link ${
-                  selectedCategory === key ? "active" : ""
-                }`}
-                onClick={() => setSelectedCategory(key)}
-              >
-                {label}
-              </button>
-            </li>
-          ))}
-        </ul>
+        {/* ====== STÍLUSOZOTT MUI TABS ====== */}
+        <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}>
+          <Tabs
+            value={selectedCategory}
+            onChange={handleTabChange}
+            variant="scrollable"
+            scrollButtons="auto"
+            allowScrollButtonsMobile
+            sx={{
+              // az indikátor színe és vastagsága
+              "& .MuiTabs-indicator": {
+                backgroundColor: "var(--primary-color)",
+                height: 4,
+              },
+            }}
+          >
+            {Object.entries(categoryTitles).map(([key, label]) => (
+              <Tab
+                key={key}
+                label={label}
+                value={key}
+                sx={{
+                  // alap szövegszín (nem aktív)
+                  color: "rgba(0,0,0,0.7)",
+                  textTransform: "none",
+                  fontWeight: 500,
+                  // kijelölt állapot szöveg
+                  "&.Mui-selected": {
+                    color: "var(--primary-color)",
+                  },
+                  // hover effekt
+                  "&:hover": {
+                    color: "var(--primary-color)",
+                    opacity: 1,
+                  },
+                }}
+              />
+            ))}
+          </Tabs>
+        </Box>
 
-        {/* kártyák */}
+        {/* terméklista */}
         <ProductSection
           title={categoryTitles[selectedCategory]}
           products={filtered}

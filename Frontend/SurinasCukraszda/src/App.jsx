@@ -18,6 +18,7 @@ import AdminProductEdit from "./admin/AdminProductEdit";
 import AdminOrdersPage from "./admin/AdminOrdersPage";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import MyOrders from "./Orders/MyOrders";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/product/:productId" element={<ProductDetail />} />
           <Route path="/admin/products" element={<AdminProductList />} />
+          <Route path="/my-orders" element={<MyOrders />} />
           <Route
             path="/admin/products/create"
             element={<AdminProductCreate />}

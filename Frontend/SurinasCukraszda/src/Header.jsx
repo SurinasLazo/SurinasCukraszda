@@ -105,6 +105,13 @@ export default function Header() {
                     <FontAwesomeIcon icon={faCartShopping} /> Kosár
                   </Link>
                 </li>
+                {user && (
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/my-orders">
+                      Rendeléseim
+                    </Link>
+                  </li>
+                )}
 
                 {!user ? (
                   <>

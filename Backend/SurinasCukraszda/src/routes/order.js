@@ -27,4 +27,17 @@ router.post("/", verifyToken, async (req, res) => {
   }
 });
 
+// GET /api/orders – bejelentkezett user rendelései
+router.get("/", verifyToken, async (req, res) => {
+  try {
+    const orders = await Order.find({ user: req.user._id })
+      .populate("items.product", "name price")
+      .sort({ createdAt: -1 });
+    res.json({ orders });
+  } catch (err) {
+    console.error("Rendeléseim lekérése hiba:", err);
+    res.status(500).json({ message: "Hiba a rendeléseim lekérésekor" });
+  }
+});
+
 module.exports = router;
