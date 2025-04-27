@@ -7,6 +7,43 @@ const { verifyToken, verifyAdmin } = require("../middleware/authMiddleware");
 
 const storage = multer.memoryStorage(); // képet RAM-ba tölti
 const upload = multer({ storage });
+const Fuse = require("fuse.js");
+
+/**
+ * GET /api/products/search?q=...
+ * Fuzzy keresés a name és description mezőkben
+ */
+router.get("/search", async (req, res) => {
+  try {
+    const q = (req.query.q || "").trim();
+    if (!q) return res.json([]);
+
+    // 1) Összes termék lekérése
+    const products = await Product.find({}).lean();
+
+    // 2) Fuse.js konfiguráció
+    const fuse = new Fuse(products, {
+      keys: [
+        { name: "name", weight: 0.8 },
+        { name: "description", weight: 0.2 },
+      ],
+      threshold: 0.4, // fuzziness (0.0–1.0)
+      includeScore: true,
+      minMatchCharLength: 2,
+    });
+
+    // 3) Keresés lefuttatása, rendezés score alapján
+    const results = fuse
+      .search(q)
+      .sort((a, b) => a.score - b.score)
+      .map((r) => r.item);
+
+    return res.json(results);
+  } catch (err) {
+    console.error("Keresési hiba:", err);
+    return res.status(500).json({ message: "Szerverhiba a keresés során." });
+  }
+});
 
 //  POST új termék (csak admin)
 router.post(

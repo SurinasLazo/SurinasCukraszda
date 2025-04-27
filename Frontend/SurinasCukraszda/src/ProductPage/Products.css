@@ -40,3 +40,17 @@
   border-color: transparent;
   box-shadow: none;
 }
+
+/* A teljes oldalt lefoglaló flex-konténer */
+.products-page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* legalább a viewport magasság */
+}
+
+/* A fő tartalom, ami kinyújtja magát */
+.products-page-content {
+  flex: 1; /* kitölti a rendelkezésre álló magasságot */
+  display: flex;
+  flex-direction: column;
+}
