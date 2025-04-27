@@ -14,26 +14,36 @@ export default function ProductSearch({
   const debounced = useDebounce(query, 300);
   const containerRef = useRef();
 
-  // Fetch a fuzzy keresésre
+  // Ref-ben tároljuk a legfrissebb onResults függvényt
+  const onResultsRef = useRef(onResults);
+  useEffect(() => {
+    onResultsRef.current = onResults;
+  }, [onResults]);
+
+  // Fetch a fuzzy keresésre csak a debounced változásakor
   useEffect(() => {
     if (!debounced) {
       setResults([]);
-      onResults(null);
+      onResultsRef.current(null);
       return;
     }
+
     fetch(
       `${API_BASE_URL}/api/products/search?q=${encodeURIComponent(debounced)}`
     )
-      .then((res) => (res.ok ? res.json() : Promise.reject(res.status)))
+      .then((res) =>
+        res.ok ? res.json() : Promise.reject(`HTTP error ${res.status}`)
+      )
       .then((data) => {
         setResults(data);
-        onResults(data);
+        onResultsRef.current(data);
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error("Search error:", err);
         setResults([]);
-        onResults([]);
+        onResultsRef.current([]);
       });
-  }, [debounced, onResults]);
+  }, [debounced]);
 
   // Klikk kívülre: dropdown bezárása
   useEffect(() => {
