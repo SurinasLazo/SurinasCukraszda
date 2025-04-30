@@ -88,11 +88,7 @@ export default function Header() {
                     <FontAwesomeIcon icon={faHouse} /> Főoldal
                   </Link>
                 </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/rolunk" onClick={collapseNav}>
-                    Rólunk
-                  </Link>
-                </li>
+
                 <li className="nav-item">
                   <Link
                     className="nav-link"
@@ -105,6 +101,11 @@ export default function Header() {
                 <li className="nav-item">
                   <Link className="nav-link" to="/cart" onClick={collapseNav}>
                     <FontAwesomeIcon icon={faCartShopping} /> Kosár
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/rolunk" onClick={collapseNav}>
+                    Rólunk
                   </Link>
                 </li>
                 {user && (

@@ -1,85 +1,102 @@
-/* 
-  1) .product-detail-wrapper => sárgás gradiens háttér 
-  2) .product-card => fehér doboz, letisztult stílus
-*/
+/* src/components/ProductDetail/ProductDetail.css */
+/* Minden stílus csak .pd-page alatt érvényesül */
 
-/* Csak ezen az oldalon, sárgás gradiens a háttér */
-.product-detail-wrapper {
+.pd-page {
+  padding: calc(40px + 60px) 20px 40px;
+  margin-top: 60px;
   background: linear-gradient(135deg, #f9f8bf 0%, #fffbea 100%);
-  padding: 40px 0;
+  min-height: 70vh;
 }
 
-/* A "kártya" fehér doboz, középre igazítva */
-.product-card {
-  background-color: #ffffff;
-  border: 1px solid #d2d0cc;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 30px;
-  margin: 0 auto;
-  max-width: 800px;
-}
-
-/* Bal oldali kép, 4:4 arány */
-.image-container {
-  width: 100%;
-  max-width: 400px;
-  height: 400px; /* 4:4 arány */
-  overflow: hidden;
-  border-radius: 8px;
-}
-.image-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border: 1px solid #dee2e6;
-}
-
-/* Termék információ */
-.product-info {
-  padding: 20px;
+/* Betöltés / hiba állapotok */
+.pd-loading,
+.pd-error {
+  max-width: 600px;
+  margin: 100px auto;
   text-align: center;
-}
-.product-name {
-  font-size: 2rem;
-  margin-bottom: 10px;
-  color: #333;
-}
-.product-price {
-  font-size: 1.75rem;
-  color: #eb7424;
-  margin-bottom: 20px;
-}
-
-/* Táblázat stílus */
-.table {
-  background-color: #fff;
-  margin: 0 auto 20px;
-  border-collapse: collapse;
-}
-.table th,
-.table td {
-  padding: 12px;
-  border: 1px solid #d2d0cc;
-}
-.table th {
-  background-color: #f9f8bf; /* Halvány sárgás fejlécek */
-  color: #333;
-  font-weight: 600;
-  width: 35%;
-}
-.table td {
+  font-size: 1.25rem;
   color: #555;
 }
 
-/* Mennyiségválasztó */
-.quantity-section {
-  margin-bottom: 20px;
+/* Fő konténer: rugalmas grid */
+.pd-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: start;
 }
-.quantity-selector {
+
+/* Kép wrapper */
+.pd-image-wrapper {
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.pd-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Információs rész */
+.pd-info-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.pd-title {
+  font-size: 2rem;
+  margin: 0 0 10px;
+  color: #333;
+}
+.pd-price {
+  font-size: 1.75rem;
+  color: #eb7424;
+  margin-bottom: 1.5rem;
+}
+
+/* Jellemzők listája */
+.pd-spec-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem;
+}
+.pd-spec-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e0dbcb;
+}
+.pd-spec-key {
+  font-weight: 600;
+  color: #555;
+  padding-right: 1rem;
+}
+.pd-spec-value {
+  color: #777;
+}
+
+/* Vásárlás szekció */
+.pd-purchase {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.pd-quantity-selector {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 0.5rem;
+}
+.pd-quantity-input {
+  width: 60px;
+  text-align: center;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 .no-arrows::-webkit-outer-spin-button,
 .no-arrows::-webkit-inner-spin-button {
@@ -89,55 +106,53 @@
 .no-arrows {
   -moz-appearance: textfield;
 }
-.quantity-input {
-  width: 60px;
-  text-align: center;
-  font-size: 1.1rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-/* Gombok */
-.btn-cart {
+.pd-add-button {
   background-color: #eb7424;
   color: #fff;
   border: none;
-  padding: 10px 20px;
-  font-size: 1.1rem;
-  border-radius: 5px;
-  transition: background-color 0.2s ease;
-}
-.btn-cart:hover {
-  background-color: #8c1b1e;
-}
-.btn-secondary {
-  background-color: #aa1f22;
-  border: none;
-  padding: 10px 20px;
+  padding: 0.6rem 1.2rem;
   font-size: 1rem;
-  border-radius: 5px;
+  border-radius: 4px;
   transition: background-color 0.2s ease;
 }
-.btn-secondary:hover {
-  background-color: #8c1b1e;
+.pd-add-button:hover {
+  background-color: #c2551c;
+}
+
+/* Vissza link */
+.pd-back-link {
+  text-align: center;
+  margin-top: 3rem;
+}
+.pd-back-button {
+  font-size: 1rem;
+  color: #aa1f22;
+  text-decoration: none;
+  border: 1px solid #aa1f22;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.pd-back-button:hover {
+  background-color: #aa1f22;
+  color: #fff;
 }
 
 /* Reszponzív */
 @media (max-width: 768px) {
-  .product-card {
-    padding: 20px;
+  .pd-container {
+    grid-template-columns: 1fr;
   }
-  .product-name {
+  .pd-title {
     font-size: 1.75rem;
   }
-  .product-price {
+  .pd-price {
     font-size: 1.5rem;
   }
-  .table th,
-  .table td {
-    padding: 8px;
+  .pd-spec-item {
+    grid-template-columns: 1fr;
   }
-  .image-container {
-    height: 300px;
+  .pd-spec-key {
+    margin-bottom: 0.25rem;
   }
 }
