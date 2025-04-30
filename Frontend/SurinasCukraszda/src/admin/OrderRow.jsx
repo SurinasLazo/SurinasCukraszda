@@ -1,4 +1,3 @@
-// src/admin/OrderRow.jsx
 import React, { useState } from "react";
 import {
   TableRow,
