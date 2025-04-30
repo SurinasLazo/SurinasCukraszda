@@ -139,16 +139,28 @@ export default function OrderRow({ order, onUpdate }) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {order.items.map((item) => (
-                    <TableRow key={item.product._id}>
-                      <TableCell>{item.product.name}</TableCell>
-                      <TableCell>{item.quantity}</TableCell>
-                      <TableCell>{item.product.price.toFixed(2)} Ft</TableCell>
-                      <TableCell>
-                        {(item.quantity * item.product.price).toFixed(2)} Ft
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {order.items.map((item) => {
+                    // Ha a product null, fallback szöveg/jelölés
+                    const prod = item.product;
+                    return (
+                      <TableRow key={item._id}>
+                        <TableCell>
+                          {prod?.name ?? (
+                            <em className="text-gray-500">Törölt termék</em>
+                          )}
+                        </TableCell>
+                        <TableCell>{item.quantity}</TableCell>
+                        <TableCell>
+                          {prod ? prod.price.toFixed(2) + " Ft" : "-"}
+                        </TableCell>
+                        <TableCell>
+                          {prod
+                            ? (item.quantity * prod.price).toFixed(2) + " Ft"
+                            : "-"}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
             </Box>

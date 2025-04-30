@@ -88,16 +88,28 @@ export default function MyOrders() {
                     </tr>
                   </thead>
                   <tbody>
-                    {o.items.map((it) => (
-                      <tr key={it.product._id}>
-                        <td>{it.product.name}</td>
-                        <td>{it.quantity}</td>
-                        <td>{it.product.price.toFixed(2)} Ft</td>
-                        <td>
-                          {(it.product.price * it.quantity).toFixed(2)} Ft
-                        </td>
-                      </tr>
-                    ))}
+                    {o.items.map((it) => {
+                      // fallback, ha a product null (törölve lett)
+                      const prod = it.product;
+                      return (
+                        <tr key={it._id}>
+                          <td>
+                            {prod?.name ?? (
+                              <em className="text-gray-500">Törölt termék</em>
+                            )}
+                          </td>
+                          <td>{it.quantity}</td>
+                          <td>
+                            {prod ? prod.price.toFixed(2) + " Ft" : "-"}+{" "}
+                          </td>
+                          <td>
+                            {prod
+                              ? (prod.price * it.quantity).toFixed(2) + " Ft"
+                              : "-"}
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
 
