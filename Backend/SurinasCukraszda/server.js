@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 
 const app = express();
-
+const compression = require("compression");
 //  CORS beállítás – Netlify URL-t
 app.use(
   cors({
@@ -15,7 +15,7 @@ app.use(
     credentials: true,
   })
 );
-
+app.use(compression());
 app.options("*", cors()); // preflight
 
 //  JSON-t és formadatokat kezel

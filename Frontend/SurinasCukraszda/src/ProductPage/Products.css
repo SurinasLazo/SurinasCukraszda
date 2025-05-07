@@ -54,3 +54,12 @@
   display: flex;
   flex-direction: column;
 }
+/* Products.css */
+
+/* A keresőnek adjunk helyet, hogy ne csússzon fel a header mögé */
+.products-search-wrapper {
+  margin: 3.5rem auto; /* fent-lent 1.5rem, középre igazítva */
+  max-width: 24rem; /* egyezzen a ProductSearch max-width-ével */
+  width: 100%;
+  z-index: 1; /* alacsonyabb, hogy header fölé ne menjen */
+}

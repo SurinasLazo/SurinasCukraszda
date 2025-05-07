@@ -16,6 +16,7 @@ import RegisterModal from "./Auth/RegisterModal";
 export default function Header() {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+  const [adminMenuOpen, setAdminMenuOpen] = useState(false);
 
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
@@ -36,6 +37,7 @@ export default function Header() {
   const collapseNav = () => {
     const nav = document.getElementById("navbarNav");
     if (nav?.classList.contains("show")) nav.classList.remove("show");
+    setAdminMenuOpen(false); // zárjuk be az admin menüt is
   };
 
   return (
@@ -59,7 +61,7 @@ export default function Header() {
               Surinás Cukrászda
             </Link>
 
-            {/* Üdvözlés, a brand után */}
+            {/* Üdvözlés */}
             {user && (
               <span className="navbar-text fst-italic text-secondary me-auto ms-3">
                 Üdv, {user.name || user.email}
@@ -80,17 +82,13 @@ export default function Header() {
 
             <div className="collapse navbar-collapse" id="navbarNav">
               <ul className="navbar-nav ms-auto">
-                {/* alapsáv */}
+                {/* Alapsáv */}
                 <li className="nav-item">
                   <Link className="nav-link" to="/" onClick={collapseNav}>
                     <FontAwesomeIcon icon={faHouse} /> Főoldal
                   </Link>
                 </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/rolunk" onClick={collapseNav}>
-                    Rólunk
-                  </Link>
-                </li>
+
                 <li className="nav-item">
                   <Link
                     className="nav-link"
@@ -105,9 +103,18 @@ export default function Header() {
                     <FontAwesomeIcon icon={faCartShopping} /> Kosár
                   </Link>
                 </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/rolunk" onClick={collapseNav}>
+                    Rólunk
+                  </Link>
+                </li>
                 {user && (
                   <li className="nav-item">
-                    <Link className="nav-link" to="/my-orders">
+                    <Link
+                      className="nav-link"
+                      to="/my-orders"
+                      onClick={collapseNav}
+                    >
                       Rendeléseim
                     </Link>
                   </li>
@@ -143,17 +150,17 @@ export default function Header() {
                     {user.role === "admin" && (
                       <li className="nav-item dropdown">
                         <button
-                          className="btn nav-link dropdown-toggle text-danger fw-bold"
-                          id="adminDropdown"
-                          data-bs-toggle="dropdown"
-                          aria-expanded="false"
+                          className="btn btn-link nav-link dropdown-toggle text-danger fw-bold"
+                          onClick={() => setAdminMenuOpen((o) => !o)}
+                          aria-expanded={adminMenuOpen}
                           type="button"
                         >
                           <FontAwesomeIcon icon={faUser} /> Menedzsment
                         </button>
                         <ul
-                          className="dropdown-menu dropdown-menu-end"
-                          aria-labelledby="adminDropdown"
+                          className={`dropdown-menu dropdown-menu-end${
+                            adminMenuOpen ? " show" : ""
+                          }`}
                         >
                           <li>
                             <Link

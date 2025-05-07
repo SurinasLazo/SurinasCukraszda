@@ -19,7 +19,8 @@ router.get("/search", async (req, res) => {
     if (!q) return res.json([]);
 
     // 1) Összes termék lekérése
-    const products = await Product.find({}).lean();
+    const products = await Product.find({}, "-image") // projection stringgel kizárjuk a képmezőt
+      .lean();
 
     // 2) Fuse.js konfiguráció
     const fuse = new Fuse(products, {
@@ -89,20 +90,24 @@ router.post(
   }
 );
 
-//  GET összes termék
+// GET /api/products – Összes termék lekérése (képmező nélkül)
 router.get("/", async (req, res) => {
   try {
-    const products = await Product.find();
+    const products = await Product.find() // lekérdezés
+      .select("-image") // képmező kizárása
+      .lean(); // tiszta JS-objektumot ad vissza (nem Mongoose doc)
     res.json(products);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
-//  GET egy termék ID alapján
+// GET egy termék ID alapján (képmező nélkül)
 router.get("/:id", async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id)
+      .select("-image") // képmező kizárása
+      .lean(); // JS-objektum
     if (!product)
       return res.status(404).json({ message: "Termék nem található" });
     res.json(product);

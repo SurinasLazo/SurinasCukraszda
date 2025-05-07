@@ -19,6 +19,7 @@ router.get("/", adminAuth, async (req, res) => {
 });
 
 router.patch("/:id", adminAuth, async (req, res) => {
+  console.log(">>> PATCH /api/admin/orders/%s body:", req.params.id, req.body);
   try {
     const { status, pickupDate } = req.body;
     const update = { status };

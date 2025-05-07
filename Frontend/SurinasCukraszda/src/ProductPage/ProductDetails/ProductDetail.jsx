@@ -1,3 +1,4 @@
+// src/components/ProductDetail/ProductDetail.jsx
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
@@ -8,28 +9,24 @@ import useCartStore from "../../store/cartStore";
 import Header from "../../Header";
 import Footer from "../../Footer";
 import "./ProductDetail.css";
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const ProductDetail = () => {
-  const { productId } = useParams(); // A MongoDB _id
+  const { productId } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [quantity, setQuantity] = useState(1);
-
   const addToCart = useCartStore((state) => state.addToCart);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(
+        const { data: fetchedProduct } = await axios.get(
           `${API_BASE_URL}/api/products/${productId}`
         );
-        const fetchedProduct = response.data;
-
-        // Itt állítod át az _id-t id-re:
         fetchedProduct.id = fetchedProduct._id;
-
         setProduct(fetchedProduct);
       } catch (err) {
         console.error("Error fetching product:", err);
@@ -44,12 +41,10 @@ const ProductDetail = () => {
   const handleQuantityChange = (delta) => {
     setQuantity((prev) => Math.max(1, prev + delta));
   };
-
   const handleInputChange = (e) => {
     const value = Number(e.target.value);
     setQuantity(value < 1 ? 1 : value);
   };
-
   const handleAddToCart = () => {
     if (product) {
       addToCart(product, quantity);
@@ -61,8 +56,8 @@ const ProductDetail = () => {
     return (
       <>
         <Header />
-        <div className="container py-5">
-          <p>Töltés...</p>
+        <div className="pd-page">
+          <p className="pd-loading">Töltés...</p>
         </div>
         <Footer />
       </>
@@ -72,8 +67,8 @@ const ProductDetail = () => {
     return (
       <>
         <Header />
-        <div className="container py-5">
-          <p>{error || "Termék nem található"}</p>
+        <div className="pd-page">
+          <p className="pd-error">{error || "Termék nem található"}</p>
         </div>
         <Footer />
       </>
@@ -83,90 +78,84 @@ const ProductDetail = () => {
   return (
     <>
       <Header />
-      {/* Csak ezen az oldalon a sárgás gradiens */}
-      <div className="product-detail-wrapper">
-        <main className="container py-5 product-detail-table">
-          <div className="product-card">
-            <div className="row no-gutters">
-              {/* Bal oldali kép */}
-              <div className="col-md-6 product-image d-flex justify-content-center mb-3 mb-md-0">
-                <div className="image-container">
-                  <img
-                    src={`${API_BASE_URL}/api/products/${product.id}/image`}
-                  />
-                </div>
+      <div className="pd-page">
+        <main className="pd-container">
+          <figure className="pd-image-wrapper">
+            <img
+              src={`${API_BASE_URL}/api/products/${product.id}/image`}
+              alt={product.name}
+              className="pd-image"
+            />
+          </figure>
+          <section className="pd-info-wrapper">
+            <h1 className="pd-title">{product.name}</h1>
+            <p className="pd-price">{product.price} Ft</p>
+
+            <ul className="pd-spec-list">
+              <li className="pd-spec-item">
+                <span className="pd-spec-key">Kategória</span>
+                <span className="pd-spec-value">{product.category}</span>
+              </li>
+              <li className="pd-spec-item">
+                <span className="pd-spec-key">Leírás</span>
+                <span className="pd-spec-value">
+                  {product.description || "Nincs elérhető leírás"}
+                </span>
+              </li>
+              <li className="pd-spec-item">
+                <span className="pd-spec-key">Allergének</span>
+                <span className="pd-spec-value">
+                  {product.allergens?.length
+                    ? product.allergens.join(", ")
+                    : "Nincs allergén"}
+                </span>
+              </li>
+              {product.weight && (
+                <li className="pd-spec-item">
+                  <span className="pd-spec-key">Súly</span>
+                  <span className="pd-spec-value">{product.weight}</span>
+                </li>
+              )}
+            </ul>
+
+            <div className="pd-purchase">
+              <div className="pd-quantity-selector">
+                <Button
+                  variant="outline-secondary"
+                  onClick={() => handleQuantityChange(-1)}
+                >
+                  –
+                </Button>
+                <Form.Control
+                  type="number"
+                  className="pd-quantity-input no-arrows"
+                  value={quantity}
+                  onChange={handleInputChange}
+                  min="1"
+                />
+                <Button
+                  variant="outline-secondary"
+                  onClick={() => handleQuantityChange(1)}
+                >
+                  +
+                </Button>
               </div>
-              {/* Jobb oldali információ */}
-              <div className="col-md-6 product-info d-flex flex-column justify-content-center">
-                <h2 className="product-name">{product.name}</h2>
-                <p className="product-price">{product.price} Ft</p>
-                <table className="table table-bordered mb-4">
-                  <tbody>
-                    <tr>
-                      <th>Kategória</th>
-                      <td>{product.category}</td>
-                    </tr>
-                    <tr>
-                      <th>Leírás</th>
-                      <td>{product.description || "Nincs elérhető leírás"}</td>
-                    </tr>
-                    <tr>
-                      <th>Allergének</th>
-                      <td>
-                        {product.allergens && product.allergens.length > 0
-                          ? product.allergens.join(", ")
-                          : "Nincs allergén"}
-                      </td>
-                    </tr>
-                    {product.weight && (
-                      <tr>
-                        <th>Súly</th>
-                        <td>{product.weight}</td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-                <div className="quantity-section text-center">
-                  <div className="quantity-selector d-inline-flex align-items-center">
-                    <Button
-                      variant="outline-secondary"
-                      onClick={() => handleQuantityChange(-1)}
-                    >
-                      -
-                    </Button>
-                    <Form.Control
-                      type="number"
-                      className="quantity-input mx-2 text-center no-arrows"
-                      value={quantity}
-                      onChange={handleInputChange}
-                      min="1"
-                    />
-                    <Button
-                      variant="outline-secondary"
-                      onClick={() => handleQuantityChange(1)}
-                    >
-                      +
-                    </Button>
-                  </div>
-                  <div className="mt-3">
-                    <Button
-                      variant="primary"
-                      className="btn-cart"
-                      onClick={handleAddToCart}
-                    >
-                      Kosárba teszem
-                    </Button>
-                  </div>
-                </div>
-              </div>
+              <Button
+                variant="primary"
+                className="pd-add-button"
+                onClick={handleAddToCart}
+              >
+                Kosárba teszem
+              </Button>
             </div>
-            <div className="mt-4 text-center">
-              <Link to="/products" className="btn btn-secondary">
-                További termékek böngészése
-              </Link>
-            </div>
-          </div>
+          </section>
         </main>
+
+        <div className="pd-back-link">
+          <Link to="/products" className="pd-back-button">
+            ← További termékek böngészése
+          </Link>
+        </div>
       </div>
       <Footer />
       <ToastContainer position="top-right" autoClose={3000} />

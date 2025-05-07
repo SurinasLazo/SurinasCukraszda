@@ -11,21 +11,20 @@ import GoogleMap from "./GoogleMap";
 import Header from "../Header";
 import Footer from "../Footer";
 
-const AboutUs = () => {
-  return (
-    <>
-      <Header />
-      <div className="about-us">
-        <div className="header-image">
-          <img src={logo} alt="Cukrászda Logo" className="logo" />
-        </div>
-        <h2>Jelmondat: Minden ízében hagyomány.</h2>
-        <Accordion className="accordion-custom">
+const AboutUs = () => (
+  <>
+    <Header />
+    <main className="about-main">
+      <section className="about-hero">
+        <img src={logo} alt="Cukrászda Logo" className="about-logo" />
+        <h1 className="hero-title">Rólunk</h1>
+        <p className="hero-subtitle">Minden ízében hagyomány.</p>
+      </section>
+      <section className="about-details">
+        <Accordion defaultActiveKey="0" className="about-accordion">
           <Accordion.Item eventKey="0">
-            <Accordion.Header className="accordion-header">
-              <strong> Bevezető</strong>
-            </Accordion.Header>
-            <Accordion.Body className="accordion-body">
+            <Accordion.Header>Bevezető</Accordion.Header>
+            <Accordion.Body>
               <p>
                 Surinás László, cukrász mester, cukrászat iránti szenvedélyével
                 és elhivatottságával egy kis cukrászdából kiindulva építette fel
@@ -36,10 +35,8 @@ const AboutUs = () => {
             </Accordion.Body>
           </Accordion.Item>
           <Accordion.Item eventKey="1">
-            <Accordion.Header className="accordion-header">
-              <strong>Történet</strong>
-            </Accordion.Header>
-            <Accordion.Body className="accordion-body">
+            <Accordion.Header>Történet</Accordion.Header>
+            <Accordion.Body>
               <p>
                 Surinás László 1960-ban kezdte pályafutását, és hamarosan a
                 magyar cukrászipar egyik legelismertebb alakjává vált.
@@ -50,10 +47,13 @@ const AboutUs = () => {
             </Accordion.Body>
           </Accordion.Item>
           <Accordion.Item eventKey="2">
-            <Accordion.Header className="accordion-header">
-              <strong>Elismerések</strong>
-            </Accordion.Header>
-            <Accordion.Body className="accordion-body">
+            <Accordion.Header>Elismerések</Accordion.Header>
+            <Accordion.Body>
+              <img
+                src={recognition}
+                alt="Országos elismerés"
+                className="recognition-img"
+              />
               <p>
                 Surinás László számos szakmai díjat és kitüntetést nyert el
                 karrierje során. Munkásságát az Országos Cukrász Szövetség és
@@ -63,10 +63,8 @@ const AboutUs = () => {
             </Accordion.Body>
           </Accordion.Item>
           <Accordion.Item eventKey="3">
-            <Accordion.Header className="accordion-header">
-              <strong>Jövőkép</strong>
-            </Accordion.Header>
-            <Accordion.Body className="accordion-body">
+            <Accordion.Header>Jövőkép</Accordion.Header>
+            <Accordion.Body>
               <p>
                 A család és az utódok büszkén viszik tovább hagyományait,
                 biztosítva, hogy az ő szenvedélye és szakértelme generációkon át
@@ -77,34 +75,23 @@ const AboutUs = () => {
             </Accordion.Body>
           </Accordion.Item>
         </Accordion>
-        <div className="gallery">
-          <img
-            src={galleryImage1}
-            alt="Gallery Image 1"
-            className="gallery-img"
-          />
-          <img
-            src={galleryImage2}
-            alt="Gallery Image 2"
-            className="gallery-img"
-          />
-          <img
-            src={galleryImage3}
-            alt="Gallery Image 3"
-            className="gallery-img"
-          />
-          <img
-            src={galleryImage4}
-            alt="Gallery Image 4"
-            className="gallery-img"
-          />
+      </section>
+      <section className="about-gallery">
+        <h2 className="section-title">Galéria</h2>
+        <div className="gallery-grid">
+          <img src={galleryImage1} alt="Galéria 1" />
+          <img src={galleryImage2} alt="Galéria 2" />
+          <img src={galleryImage3} alt="Galéria 3" />
+          <img src={galleryImage4} alt="Galéria 4" />
         </div>
-        <h3>Itt található a Sütiház</h3>
+      </section>
+      <section className="about-location">
+        <h2 className="section-title">Hol talál minket?</h2>
         <GoogleMap />
-      </div>
-      <Footer />
-    </>
-  );
-};
+      </section>
+    </main>
+    <Footer />
+  </>
+);
 
 export default AboutUs;

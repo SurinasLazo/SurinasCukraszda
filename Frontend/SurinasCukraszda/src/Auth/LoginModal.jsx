@@ -27,19 +27,26 @@ const LoginModal = ({ show, handleClose, switchToRegister }) => {
       const token = response.data.token;
       // Dekódoljuk a JWT payloadot.
       const payload = JSON.parse(atob(token.split(".")[1]));
+
       login(
-        { id: payload.id, email: payload.email, role: payload.role },
+        {
+          id: payload.id,
+          email: payload.email,
+          role: payload.role,
+          name: payload.name,
+        },
         token
       );
-      localStorage.setItem("token", token);
+      /* localStorage.setItem("token", token);
       localStorage.setItem(
         "user",
         JSON.stringify({
           id: payload.id,
           email: payload.email,
           role: payload.role,
+          name: payload.name,
         })
-      );
+      ); */
       handleClose();
       console.log("Sikeres bejelentkezés!");
     } catch (error) {
