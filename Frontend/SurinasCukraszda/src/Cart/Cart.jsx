@@ -161,7 +161,7 @@ const Cart = () => {
               <div className="cart-summary mt-4">
                 <h3>Összesen: {total} Ft</h3>
                 <button className="btn btn-primary" onClick={handleOrderSubmit}>
-                  Fizetés
+                  Rendelés leadása
                 </button>
               </div>
             </>
