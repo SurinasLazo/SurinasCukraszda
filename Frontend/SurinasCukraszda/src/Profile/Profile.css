@@ -1,0 +1,90 @@
+.profile-container {
+  max-width: 480px;
+  margin: 2rem auto 4rem;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Profil fejléc */
+.profile-container h2 {
+  text-align: center;
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+/* Az űrlap maga */
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Címkék + mezők */
+.profile-form label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  color: #333;
+}
+
+.profile-form input {
+  margin-top: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+.profile-form input::placeholder {
+  color: #777;
+}
+/* Fókusz effekt */
+.profile-form input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(216, 51, 68, 0.15);
+}
+
+/* Jelszó mezők betűköz */
+.profile-form input[type="password"] {
+  letter-spacing: 0.1em;
+}
+
+/* Mentés gomb */
+.profile-form .btn {
+  align-self: flex-end;
+  padding: 0.6rem 1.6rem;
+  font-size: 1rem;
+  font-weight: 600;
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  transition: background-color 0.2s;
+}
+.profile-form .btn:hover {
+  background-color: #c31f2e;
+}
+
+/* Mobilról beljebb húzva */
+@media (max-width: 576px) {
+  .profile-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  .profile-form input {
+    font-size: 0.95rem;
+    padding: 0.6rem 0.8rem;
+  }
+  .profile-form .btn {
+    width: 100%;
+    text-align: center;
+    padding: 0.65rem;
+  }
+}

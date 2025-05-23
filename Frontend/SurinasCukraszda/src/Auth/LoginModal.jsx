@@ -1,4 +1,3 @@
-// src/Auth/LoginModal.jsx
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
@@ -27,19 +26,17 @@ const LoginModal = ({ show, handleClose, switchToRegister }) => {
       const token = response.data.token;
       // Dekódoljuk a JWT payloadot.
       const payload = JSON.parse(atob(token.split(".")[1]));
+
       login(
-        { id: payload.id, email: payload.email, role: payload.role },
-        token
-      );
-      localStorage.setItem("token", token);
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
+        {
           id: payload.id,
           email: payload.email,
           role: payload.role,
-        })
+          name: payload.name,
+        },
+        token
       );
+
       handleClose();
       console.log("Sikeres bejelentkezés!");
     } catch (error) {

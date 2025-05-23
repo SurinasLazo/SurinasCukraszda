@@ -7,6 +7,7 @@ import Header from "../Header";
 import Footer from "../Footer";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Cart = () => {
@@ -39,10 +40,8 @@ const Cart = () => {
     }
   };
 
-  const totalPrice = cart.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  // Összesített ár kiszámolása
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   const handleOrderSubmit = async () => {
     if (!user || !token) {
@@ -51,7 +50,16 @@ const Cart = () => {
       return;
     }
 
-    if (cart.length === 0) return toast.error("A kosár üres!");
+    if (cart.length === 0) {
+      toast.error("A kosár üres!");
+      return;
+    }
+
+    // Backendnek megfelelő formátum
+    const items = cart.map((item) => ({
+      product: item.id,
+      quantity: item.quantity,
+    }));
 
     try {
       const response = await fetch(`${API_BASE_URL}/api/orders`, {
@@ -61,11 +69,8 @@ const Cart = () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          items: cart.map((item) => ({
-            product: item._id || item.id,
-            quantity: item.quantity,
-          })),
-          total: totalPrice,
+          items,
+          total, // mostantól ezt várja a backend
         }),
       });
 
@@ -90,6 +95,7 @@ const Cart = () => {
         <Header />
         <div className="content-wrap container cart-container">
           <h1 className="cart-title">Kosár</h1>
+
           {cart.length === 0 ? (
             <p className="empty-cart">A kosár jelenleg üres.</p>
           ) : (
@@ -102,9 +108,7 @@ const Cart = () => {
                   >
                     <div className="col-md-2">
                       <img
-                        src={`${
-                          import.meta.env.VITE_API_BASE_URL
-                        }/api/products/${item.id}/image`}
+                        src={`${API_BASE_URL}/api/products/${item.id}/image`}
                         alt={item.name}
                         className="img-fluid cart-item-img"
                       />
@@ -152,14 +156,16 @@ const Cart = () => {
                   </div>
                 ))}
               </div>
+
               <div className="cart-summary mt-4">
-                <h3>Összesen: {totalPrice} Ft</h3>
+                <h3>Összesen: {total} Ft</h3>
                 <button className="btn btn-primary" onClick={handleOrderSubmit}>
-                  Fizetés
+                  Rendelés leadása
                 </button>
               </div>
             </>
           )}
+
           <div className="back-to-products mt-4">
             <Link to="/products" className="btn btn-secondary">
               További termékek böngészése

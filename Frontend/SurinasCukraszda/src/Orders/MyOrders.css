@@ -1,0 +1,92 @@
+/* Körítő flex‐elrendezés, hogy a footer mindig lent maradjon */
+.my-orders-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.my-orders-content {
+  flex: 1;
+}
+
+/* Section cím */
+.section-title {
+  color: var(--primary-color);
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+/* Rendelés kártyák */
+.order-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+  padding: 1.25rem;
+  transition: box-shadow 0.2s;
+}
+.order-card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Header rész */
+.order-card__header h5 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--text-color, #333);
+}
+.order-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  color: #555;
+  margin-top: 0.5rem;
+}
+
+/* Táblázat */
+.order-card__table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+.order-card__table th,
+.order-card__table td {
+  padding: 0.75rem;
+  text-align: center;
+  border: 1px solid #e0e0e0;
+}
+.order-card__table thead {
+  background: #f9f9f9;
+}
+.order-card__table tbody tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+/* Footer rész a kártyán */
+.order-card__footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+.order-card__total {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+/* Mobilra */
+@media (max-width: 576px) {
+  .order-card__meta {
+    flex-direction: column;
+  }
+  .order-card__table th,
+  .order-card__table td {
+    font-size: 0.85rem;
+    padding: 0.5rem;
+  }
+  .order-card__total {
+    font-size: 1rem;
+  }
+}

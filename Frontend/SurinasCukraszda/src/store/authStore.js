@@ -1,4 +1,3 @@
-// src/store/authStore.js
 import { create } from "zustand";
 
 const tokenFromStorage = localStorage.getItem("token");

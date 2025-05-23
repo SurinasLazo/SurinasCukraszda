@@ -1,112 +1,144 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
-import "./Products.css";
 import Header from "../Header";
 import Footer from "../Footer";
+import ProductCard from "../Components/ProductCard";
+import ProductSearch from "../Components/ProductSearch";
+import { Box, Tabs, Tab } from "@mui/material";
+import "./Products.css"; // importáld be a CSS-t
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const categoryTitles = {
+  összes: "Összes termék",
+  sütemény: "Sütemények",
+  "csomagolt sütemény": "Csomagolt Sütemények",
+  fagyi: "Fagylalt",
+};
 
-const ProductCard = ({ product }) => (
-  <div className="card" style={{ width: "18rem" }}>
-    <img src={`${API_BASE_URL}/api/products/${product.id}/image`} />
-    <div className="card-body">
-      <h5 className="card-title">{product.name}</h5>
-      <p className="card-text">Ár: {product.price} Ft</p>
-      <Link to={`/product/${product.id}`} className="btn btn-primary">
-        Részletek
-      </Link>
-    </div>
-  </div>
-);
+const ProductSection = ({ title, products }) => {
+  if (!products.length) {
+    return <p className="text-center">Nincs termék ebben a kategóriában.</p>;
+  }
+  return (
+    <section className="product-section mb-5">
+      <h2 className="section-title">{title}</h2>
+      <div className="row gx-4 gy-4">
+        {products.map((p) => (
+          <div key={p.id} className="col-12 col-sm-6 col-md-4 col-lg-3">
+            <ProductCard product={p} />
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
 
-const ProductSection = ({ title, products }) => (
-  <div className="product-section">
-    <h2>{title}</h2>
-    <div className="row">
-      {products.map((product) => (
-        <div key={product.id} className="col-md-3 mb-4">
-          <ProductCard product={product} />
-        </div>
-      ))}
-    </div>
-  </div>
-);
-
-const Products = () => {
+export default function Products() {
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("összes");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [searchResults, setSearchResults] = useState(null);
 
+  // 1) Betöltés
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get(`${API_BASE_URL}/api/products`);
-        // Átalakítjuk az _id-t id-re, hogy kompatibilis legyen a régi kóddal
-        const fetchedProducts = response.data.map((prod) => ({
-          ...prod,
-          id: prod._id,
-        }));
-        setProducts(fetchedProducts);
-        setLoading(false);
-      } catch (err) {
+    axios
+      .get(`${API_BASE_URL}/api/products`)
+      .then((res) => {
+        const fetched = res.data.map((p) => ({ ...p, id: p._id }));
+        setProducts(fetched);
+      })
+      .catch((err) => {
         console.error("Error fetching products:", err);
         setError("Hiba történt a termékek betöltésekor.");
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
+      })
+      .finally(() => setLoading(false));
   }, []);
 
-  const categoryTitles = {
-    sütemény: "Sütemények",
-    "csomagolt sütemény": "Csomagolt Sütemények",
-    fagyi: "Fagylalt",
-    összes: "Összes termék",
-  };
+  // 2) Kategóriaváltás törli a keresést
+  useEffect(() => {
+    setSearchResults(null);
+  }, [selectedCategory]);
 
-  let filteredProducts = products;
-  if (selectedCategory !== "összes") {
-    filteredProducts = products.filter(
-      (product) => product.category === selectedCategory
-    );
-  }
+  // 3) Keresési eredmény callback memoizálva
+  const handleSearchResults = useCallback(
+    (results) => {
+      if (!results || results.length === 0) {
+        setSearchResults(results && results.length === 0 ? [] : null);
+      } else {
+        const inCat =
+          selectedCategory === "összes"
+            ? results
+            : results.filter((p) => p.category === selectedCategory);
+        setSearchResults(inCat);
+      }
+    },
+    [selectedCategory]
+  );
 
-  if (loading) return <p>Töltés...</p>;
-  if (error) return <p>{error}</p>;
+  if (loading) return <p className="text-center">Töltés…</p>;
+  if (error) return <p className="text-center text-danger">{error}</p>;
+
+  // 4) Lista előállítása
+  const byCategory =
+    selectedCategory === "összes"
+      ? products
+      : products.filter((p) => p.category === selectedCategory);
+
+  const displayed = Array.isArray(searchResults) ? searchResults : byCategory;
 
   return (
-    <>
+    <div className="products-page-container">
       <Header />
-      <div className="container">
-        {/* Navigációs menü fülökkel */}
-        <ul className="nav nav-tabs mt-4">
-          {Object.keys(categoryTitles).map((catKey) => (
-            <li key={catKey} className="nav-item">
-              <button
-                className={`nav-link ${
-                  selectedCategory === catKey ? "active" : ""
-                }`}
-                onClick={() => setSelectedCategory(catKey)}
-              >
-                {categoryTitles[catKey]}
-              </button>
-            </li>
-          ))}
-        </ul>
 
-        {/* Szűrt termékek megjelenítése */}
-        <div className="mt-4">
+      <main className="products-page-content">
+        <div className="container py-4">
+          {/* Kereső */}
+          <div className="products-search-wrapper">
+            <ProductSearch onResults={handleSearchResults} />
+          </div>
+
+          {/* Kategória-fülek */}
+          <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}>
+            <Tabs
+              value={selectedCategory}
+              onChange={(_e, cat) => setSelectedCategory(cat)}
+              variant="scrollable"
+              scrollButtons="auto"
+              allowScrollButtonsMobile
+              sx={{
+                "& .MuiTabs-indicator": {
+                  backgroundColor: "var(--primary-color)",
+                  height: 4,
+                },
+              }}
+            >
+              {Object.entries(categoryTitles).map(([key, label]) => (
+                <Tab
+                  key={key}
+                  label={label}
+                  value={key}
+                  sx={{
+                    color: "rgba(0,0,0,0.7)",
+                    textTransform: "none",
+                    fontWeight: 500,
+                    "&.Mui-selected": { color: "var(--primary-color)" },
+                    "&:hover": { color: "var(--primary-color)", opacity: 1 },
+                  }}
+                />
+              ))}
+            </Tabs>
+          </Box>
+
+          {/* Terméklista*/}
           <ProductSection
             title={categoryTitles[selectedCategory]}
-            products={filteredProducts}
+            products={displayed}
           />
         </div>
-      </div>
-      <Footer />
-    </>
-  );
-};
+      </main>
 
-export default Products;
+      <Footer />
+    </div>
+  );
+}

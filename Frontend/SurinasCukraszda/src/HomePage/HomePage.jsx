@@ -1,19 +1,17 @@
+import React from "react";
 import Header from "../Header";
-import WelcomeMessage from "./Welcome";
-import Carousel from "./Carosuel";
-import FeaturedProducts from "./FeaturedProducts";
+import HeroSection from "./HeroSection";
+import FeaturedSlider from "./FeaturedSlider";
 import Footer from "../Footer";
-function HomePage() {
+import "./HomePage.css";
+
+export default function HomePage() {
   return (
-    <div>
-      <div className="homepage">
-        <Header></Header>
-        <WelcomeMessage></WelcomeMessage>
-        <Carousel></Carousel>
-        <FeaturedProducts></FeaturedProducts>
-      </div>
-      <Footer></Footer>
+    <div className="home-page">
+      <Header />
+      <HeroSection />
+      <FeaturedSlider />
+      <Footer />
     </div>
   );
 }
-export default HomePage;

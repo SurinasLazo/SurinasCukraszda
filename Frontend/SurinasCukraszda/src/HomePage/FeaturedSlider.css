@@ -1,0 +1,18 @@
+.featured-slider {
+  padding: 2rem 1rem;
+  background: #fff;
+}
+.featured-slider__title {
+  text-align: center;
+  margin-bottom: 0.5rem;
+  color: #921a2f;
+  font-size: 1.75rem;
+}
+.featured-slider__subtitle {
+  text-align: center;
+  margin: 0 auto 1.5rem;
+  color: #50332b;
+  font-size: 1rem;
+  max-width: 600px;
+  line-height: 1.4;
+}
