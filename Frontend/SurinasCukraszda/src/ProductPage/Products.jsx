@@ -87,19 +87,18 @@ export default function Products() {
 
   const displayed = Array.isArray(searchResults) ? searchResults : byCategory;
 
-  // === Így építjük fel a flex-konténert ===
   return (
     <div className="products-page-container">
       <Header />
 
       <main className="products-page-content">
         <div className="container py-4">
-          {/* ====== Kereső ====== */}
+          {/* Kereső */}
           <div className="products-search-wrapper">
             <ProductSearch onResults={handleSearchResults} />
           </div>
 
-          {/* ====== Kategória-fülek ====== */}
+          {/* Kategória-fülek */}
           <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}>
             <Tabs
               value={selectedCategory}
@@ -131,7 +130,7 @@ export default function Products() {
             </Tabs>
           </Box>
 
-          {/* ====== Terméklista ====== */}
+          {/* Terméklista*/}
           <ProductSection
             title={categoryTitles[selectedCategory]}
             products={displayed}

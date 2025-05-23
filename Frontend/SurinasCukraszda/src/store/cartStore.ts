@@ -1,4 +1,3 @@
-// src/store/cartStore.ts
 import { createWithEqualityFn } from "zustand/traditional";
 import { persist } from "zustand/middleware";
 import { shallow } from "zustand/shallow";
@@ -26,8 +25,6 @@ type StoreState = CartState & CartActions;
 
 const useCartStore = createWithEqualityFn<
   StoreState,
-  // Itt mondjuk meg, hogy van egy persisztencia-mutatórunk,
-  // amely StoreState-t ment:
   [["zustand/persist", StoreState]]
 >(
   persist(
@@ -66,7 +63,6 @@ const useCartStore = createWithEqualityFn<
       name: "cartStore",
       partialize: (state) => ({ cart: state.cart }),
       onError: (err) => console.error("Cart persist error:", err),
-      // ha sessionStorage‑t akarsz: getStorage: () => sessionStorage
     }
   ),
   shallow

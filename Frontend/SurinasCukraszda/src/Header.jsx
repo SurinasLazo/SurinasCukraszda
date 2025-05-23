@@ -195,15 +195,16 @@ export default function Header() {
                       </li>
                     )}
                     <li className="nav-item">
-                      <button
+                      <Link
                         className="btn btn-link nav-link"
+                        to="/"
                         onClick={() => {
-                          logout();
-                          collapseNav();
+                          logout(); // kijelentkeztet
+                          collapseNav(); // becsukja a menüt
                         }}
                       >
                         Kijelentkezés
-                      </button>
+                      </Link>
                     </li>
                   </>
                 )}
