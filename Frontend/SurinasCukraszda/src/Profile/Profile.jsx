@@ -1,4 +1,3 @@
-// src/pages/Profile.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../Header";
@@ -65,7 +64,6 @@ export default function Profile() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Hiba");
-      // Frissítjük a store‐t is, hogy a headerben is az új név jelenjen meg
       setUser(data.user);
       toast.success(data.message);
       setForm((f) => ({ ...f, password: "", confirm: "" }));

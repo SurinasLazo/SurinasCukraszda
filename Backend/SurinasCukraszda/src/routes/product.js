@@ -5,7 +5,7 @@ const multer = require("multer");
 const path = require("path");
 const { verifyToken, verifyAdmin } = require("../middleware/authMiddleware");
 
-const storage = multer.memoryStorage(); // képet RAM-ba tölti
+const storage = multer.memoryStorage();
 const upload = multer({ storage });
 const Fuse = require("fuse.js");
 
@@ -93,7 +93,7 @@ router.post(
 // GET /api/products – Összes termék lekérése (képmező nélkül)
 router.get("/", async (req, res) => {
   try {
-    const products = await Product.find() // lekérdezés
+    const products = await Product.find()
       .select("-image") // képmező kizárása
       .lean(); // tiszta JS-objektumot ad vissza (nem Mongoose doc)
     res.json(products);

@@ -1,4 +1,3 @@
-// src/admin/AdminOrdersPage.jsx
 import React, { useEffect, useState } from "react";
 import {
   Table,

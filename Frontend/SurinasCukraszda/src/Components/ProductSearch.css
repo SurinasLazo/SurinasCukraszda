@@ -3,7 +3,6 @@
   width: 100%;
   max-width: 24rem;
   margin: 0 auto;
-  /* A hero panel felett legyen, de a header alatt maradjon */
   z-index: 5;
 }
 
@@ -52,7 +51,6 @@
   padding: 0;
   max-height: 12rem;
   overflow-y: auto;
-  /* A dropdown legyen a header felett is */
   z-index: 10;
 }
 

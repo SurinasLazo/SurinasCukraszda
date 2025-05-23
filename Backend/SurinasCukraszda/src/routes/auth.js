@@ -1,4 +1,3 @@
-// src/routes/auth.js
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
@@ -50,7 +49,7 @@ router.post("/login", async (req, res) => {
 
     const token = jwt.sign(
       {
-        id: user._id.toString(), // fontos: stringgé alakítjuk
+        id: user._id.toString(),
         email: user.email,
         role: user.role,
         name: user.name,

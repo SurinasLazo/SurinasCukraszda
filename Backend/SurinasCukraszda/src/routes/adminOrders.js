@@ -1,4 +1,3 @@
-// src/routes/adminOrders.js
 const express = require("express");
 const router = express.Router();
 const Order = require("../models/Order");
@@ -26,7 +25,6 @@ router.patch("/:id", adminAuth, async (req, res) => {
     if (status === "ready_for_pickup") update.pickupDate = pickupDate;
     else update.pickupDate = undefined;
 
-    // itt már chaining-gel populáljuk is
     const order = await Order.findByIdAndUpdate(
       req.params.id,
       { $set: update },

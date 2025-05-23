@@ -1,4 +1,4 @@
-/* ---------- Modal Backdrop with Blur ---------- */
+/*  Modal Backdrop with Blur */
 .modal-backdrop.show {
   opacity: 1 !important;
   background-color: rgba(0, 0, 0, 0.3) !important;
@@ -7,7 +7,7 @@
   transition: opacity 0.3s ease;
 }
 
-/* ----------  Modal Content ---------- */
+/* Modal Content */
 @keyframes modalSlideFadeEnhanced {
   from {
     opacity: 0;
@@ -31,7 +31,7 @@
   overflow: hidden;
 }
 
-/* ---------- Modal Header & Title ---------- */
+/* Modal Header & Title  */
 .modal-header {
   border-bottom: none;
   background: transparent;
@@ -43,13 +43,13 @@
   color: #333;
 }
 
-/* ---------- Modal Body ---------- */
+/*  Modal Body  */
 .modal-body {
   font-size: 1rem;
   color: #555;
 }
 
-/* ---------- Input & Form Control Styling ---------- */
+/*  Input & Form Control Styling  */
 .modal-content .form-control {
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -61,12 +61,12 @@
   box-shadow: 0 0 8px rgba(235, 116, 36, 0.3);
 }
 
-/* ---------- Button Animations ---------- */
+/*  Button Animations  */
 .modal-content .btn {
   transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 .modal-content .btn:hover {
   transform: scale(1.05);
-  background-color: #d8d5d5; /* Sötétebb árnyalat a hover állapothoz */
+  background-color: #d8d5d5;
 }

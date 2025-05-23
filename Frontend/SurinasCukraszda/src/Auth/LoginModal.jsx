@@ -1,4 +1,3 @@
-// src/Auth/LoginModal.jsx
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
@@ -37,16 +36,7 @@ const LoginModal = ({ show, handleClose, switchToRegister }) => {
         },
         token
       );
-      /* localStorage.setItem("token", token);
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          id: payload.id,
-          email: payload.email,
-          role: payload.role,
-          name: payload.name,
-        })
-      ); */
+
       handleClose();
       console.log("Sikeres bejelentkezés!");
     } catch (error) {
